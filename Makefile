@@ -4,12 +4,14 @@ INCLUDE_PATH = include
 FILES = \
   src/data.o\
   src/rwlock.o\
+  src/cog_tester.o\
+  src/jitd_tester.o
 
 HEADERS = $(shell find ${INCLUDE_PATH} -name '*.hpp') \
           $(patsubst %.jitd, %.hpp, $(shell find ${INCLUDE_PATH} -name '*.jitd'))
 
-CPP_FLAGS = -std=c++11
-# -lpthread
+CPP_FLAGS = --std=c++1y
+LINKER_FLAGS = -lpthread
 
 CPP = clang++ -I ${INCLUDE_PATH} -g $(CPP_FLAGS)
 
@@ -17,7 +19,7 @@ all: driver workload_gen
 
 driver : ${FILES} src/driver.cpp 
 	@echo "Building Driver"
-	@${CPP} -o $@ $^
+	@${CPP} ${LINKER_FLAGS} -o $@ $^
 
 workload_gen : src/workload.cpp
 	@echo "Building Workload Generator"

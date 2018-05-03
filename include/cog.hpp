@@ -52,6 +52,8 @@ typedef enum {
   COG_SORTED_ARRAY
 } CogType;
 
+template <class Tuple> class CogHandleBase;
+
 template <class Tuple>
 class Cog {
   
@@ -68,6 +70,11 @@ class Cog {
       std::cerr << "Cog.size() is unimplemented" << std::endl;
       exit(-1);
     }    
+    virtual void apply_to_children(std::function<void(std::shared_ptr<CogHandleBase<Tuple>>)> fn)
+    {
+      std::cerr << "Cog.apply_to_children() is unimplemented" << std::endl;
+      exit(-1);
+    }
     
     void printDebug() { printDebug(0); }
     void printPrefix(int depth){ while(depth > 0){ std::cout << "  "; depth--; } }
@@ -100,6 +107,11 @@ class CogHandleBase {
     inline void put(CogPtr<Tuple> nref)
     { 
       atomic_store(&ref, nref); 
+    }
+
+    void apply_to_children(std::function<void(std::shared_ptr<CogHandleBase<Tuple>>)> fn)
+    {
+      get().apply_to_children(fn);
     }
     
     inline Iterator<Tuple> iterator()            { return get()->iterator(); }

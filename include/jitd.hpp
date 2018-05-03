@@ -24,8 +24,13 @@ class JITD {
     JITD() : 
       root(new CogHandleBase<Tuple>(CogPtr<Tuple>(new ArrayCog<Tuple>(
         Buffer<Tuple>(new std::vector<Tuple>()))))),
-      policy() 
+      policy(Policy(root)) 
       {}
+
+    bool idle()
+    {
+      policy.act();
+    }
     
     CogHandle<Tuple> getRoot()
     {
@@ -37,13 +42,8 @@ class JITD {
       // Root changes with each version, so we need to sync the pointer.
       CogHandle<Tuple> r = std::atomic_load(&root);
       
-      // The policy may need to modify the root.  Call it here.
-      RewritePolicy<Tuple> p = std::atomic_load(&policy);
-      p->beforeRootIterator(r);
-      p->beforeIterator(r);
-      
       // And grab an iterator on whatever falls out.
-      return r->iterator(p);
+      return r->iterator();
     }
     
     void insert(Buffer<Tuple> records)
@@ -60,19 +60,10 @@ class JITD {
       CogHandle<Tuple> newRoot = 
         CogHandle<Tuple>(new CogHandleBase<Tuple>(CogPtr<Tuple>(newRootCog)));
       
-      // Sync up the policy
-      RewritePolicy<Tuple> p = std::atomic_load(&policy);
-      
-      // Run pre-insertion operations as needed.
-      p->beforeInsert(root);
-      
       // As one atomic operation, perform:
       //   newRootCog->lhs = root
       //   root = newRoot
       swapInNewRoot(newRoot, newRootCog->lhs);
-      
-      // Run post-insertion operations as needed.
-      p->afterInsert(root);
     }
     
     // remove() exactly mirrors insert.
@@ -85,35 +76,26 @@ class JITD {
       );
       CogHandle<Tuple> newRoot = 
         CogHandle<Tuple>(new CogHandleBase<Tuple>(CogPtr<Tuple>(newRootCog)));
-      RewritePolicy<Tuple> p = std::atomic_load(&policy);
-      p->beforeDelete(root);
       swapInNewRoot(newRoot, newRootCog->source);
-      p->afterDelete(newRoot);
     }
     
     void printDebug()
     {
       CogHandle<Tuple> r = std::atomic_load(&root);
-      std::cout << "gROOT [" << std::atomic_load(&policy)->name()
-                << "; " << r->size() << " elements]" << std::endl;
+      std::cout << "gROOT [" << r->size() << " elements]" << std::endl;
       r->printDebug(1);
+    }
+
+    Policy *getPolicy()
+    {
+      return &policy;
     }
     
     int size()
     {
       return std::atomic_load(&root)->size();
     }
-    
-    void setPolicy(RewritePolicy<Tuple> newPolicy)
-    {
-      std::atomic_store(&policy, newPolicy);
-    }
-    
-    RewritePolicy<Tuple> getPolicy()
-    {
-      return std::atomic_load(&policy);
-    }
-    
+
   private: 
     
     // Replace root with newRoot.  placeholder is set to the value of root

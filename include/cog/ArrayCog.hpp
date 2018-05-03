@@ -72,6 +72,7 @@ class ArrayCog : public Cog<Tuple>
     {
       return Iterator<Tuple>(new BufferIterator<Tuple>(sortedBuffer()));
     }
+    void apply_to_children(std::function<void(CogPtr<Tuple>)> fn) {}
 
     void printDebug(int depth)
     {

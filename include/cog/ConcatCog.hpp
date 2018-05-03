@@ -10,6 +10,11 @@ class ConcatCog : public Cog<Tuple>
       return Iterator<Tuple>(new MergeIterator<Tuple>(lhs, rhs));
     }
     int size(){ return lhs->size() + rhs->size(); }
+    void apply_to_children(std::function<void(CogPtr<Tuple>)> fn) 
+    {
+      fn(lhs);
+      fn(rhs);
+    }
     
     void printDebug(int depth)
     {

@@ -16,6 +16,11 @@ class BTreeCog : public Cog<Tuple>
     }
 
     int size(){ return lhs->size() + rhs->size(); }
+    void apply_to_children(std::function<void(CogPtr<Tuple>)> fn) 
+    {
+      fn(lhs);
+      fn(rhs);
+    }
 
     void printDebug(int depth)
     {

@@ -13,9 +13,9 @@
 #include <queue>
 
 #include "jitd.hpp"
+#include "test.hpp"
 
 using namespace std;
-using namespace std::placeholders;
 
 double total_time(timeval &start, timeval &end)
 {
@@ -23,9 +23,8 @@ double total_time(timeval &start, timeval &end)
          (end.tv_usec - start.tv_usec); 
 }
 
-template <class Policy>
 void run_update_thread(
-  JITD<Record,Policy> *jitd, 
+  JITD<Record,JITD_TEST_POLICY> *jitd, 
   Key max_key,
   int size, 
   long int low_mark, 
@@ -78,8 +77,7 @@ void run_update_thread(
   
 }
 
-template <class Policy>
-void run_test_thread(JITD<Record, Policy> *jitd, string file, int per_op_sleep_ms)
+void run_test_thread(JITD<Record, JITD_TEST_POLICY> *jitd, string file, int per_op_sleep_ms)
 {
   ifstream in(file);
   timeval start, end;
@@ -119,15 +117,14 @@ RecordBuffer buffer_cmd(istream &toks)
 #define CASE_1(s) toks >> op; if(string(s) == op)
 #define CASE(s) else if(string(s) == op)
   
-template <class Policy>
 int jitd_test(
-  JITD<Record, Policy> &jitd, 
+  JITD<Record, JITD_TEST_POLICY> &jitd, 
   istream &input, 
   bool interactive, 
   int per_op_sleep_ms
 ) {
   string line;
-  vector<thread> threads;
+  vector<std::thread> threads;
   
   timeval global_start, global_end;
   gettimeofday(&global_start, NULL);

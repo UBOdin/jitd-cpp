@@ -15,16 +15,11 @@
 #include "policy.hpp"
 
 using namespace std;
-using namespace std::placeholders;
-
-
-typedef Buffer<Record> RecordBuffer;
-typedef CogHandle<Record> RecordCogHandle;
 
 RecordBuffer build_buffer(int len, int max)
 {
   int i;
-  RecordBuffer buff(new vector<Record>(len));
+  RecordBuffer buff(new std::vector<Record>(len));
   for(i = 0; i < len; i++){
     (*buff)[i].key = rand() % max;
     (*buff)[i].value = (Value)0xDEADBEEF;

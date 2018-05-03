@@ -8,9 +8,6 @@
 
 using namespace std;
 
-#include "cog_tester.cpp"
-#include "jitd_tester.cpp"
-
 typedef enum {
   COG_TEST, JITD_TEST
 } TestMode;
