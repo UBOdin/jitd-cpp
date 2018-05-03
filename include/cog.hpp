@@ -4,6 +4,7 @@
 #include <memory>
 #include <atomic>
 #include <iostream>
+#include <algorithm>
 
 #include "data.hpp"
 
@@ -57,7 +58,7 @@ class Cog {
   public:
     Cog(CogType type): type(type) {}
   
-    virtual Iterator<Tuple> iterator(RewritePolicy<Tuple> p)
+    virtual Iterator<Tuple> iterator()
     { 
       std::cerr << "Cog.iterator() is unimplemented" << std::endl;
       exit(-1);
@@ -101,8 +102,7 @@ class CogHandleBase {
       atomic_store(&ref, nref); 
     }
     
-    inline Iterator<Tuple> iterator(RewritePolicy<Tuple> p)
-                                                 { return get()->iterator(p); }
+    inline Iterator<Tuple> iterator()            { return get()->iterator(); }
     inline int             size()                { return get()->size(); }
     inline CogType         type()                { return get()->type; }
     inline void            printDebug()          { get()->printDebug(); }

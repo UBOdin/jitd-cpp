@@ -4,24 +4,27 @@
 #include <iostream>
 #include <memory>
 #include <atomic>
+#import <queue>
+
 
 #include "data.hpp"
 #include "cog.hpp"
-#include "policy.hpp"
 #include "iterator.hpp"
-#include "rewrite.hpp"
+#include "transform.hpp"
+#include "policy.hpp"
 
-template<class Tuple>
+
+template<class Tuple, class Policy>
 class JITD {
   
   CogHandle<Tuple>     root;
-  RewritePolicy<Tuple> policy;
+  Policy               policy;
   
   public:
     JITD() : 
       root(new CogHandleBase<Tuple>(CogPtr<Tuple>(new ArrayCog<Tuple>(
         Buffer<Tuple>(new std::vector<Tuple>()))))),
-      policy(new RewritePolicyBase<Tuple>()) 
+      policy() 
       {}
     
     CogHandle<Tuple> getRoot()

@@ -10,12 +10,9 @@
 #include <thread>
 #include <random>
 #include <sys/time.h>
+#include <queue>
 
 #include "jitd.hpp"
-#include "test.hpp"
-#include "policy/Cracker.hpp"
-#include "policy/Inline.hpp"
-//#include "policy/DumbCracker.hpp"
 
 using namespace std;
 using namespace std::placeholders;
@@ -26,8 +23,9 @@ double total_time(timeval &start, timeval &end)
          (end.tv_usec - start.tv_usec); 
 }
 
+template <class Policy>
 void run_update_thread(
-  JITD<Record> *jitd, 
+  JITD<Record,Policy> *jitd, 
   Key max_key,
   int size, 
   long int low_mark, 
@@ -80,7 +78,8 @@ void run_update_thread(
   
 }
 
-void run_test_thread(JITD<Record> *jitd, string file, int per_op_sleep_ms)
+template <class Policy>
+void run_test_thread(JITD<Record, Policy> *jitd, string file, int per_op_sleep_ms)
 {
   ifstream in(file);
   timeval start, end;
@@ -120,8 +119,9 @@ RecordBuffer buffer_cmd(istream &toks)
 #define CASE_1(s) toks >> op; if(string(s) == op)
 #define CASE(s) else if(string(s) == op)
   
+template <class Policy>
 int jitd_test(
-  JITD<Record> &jitd, 
+  JITD<Record, Policy> &jitd, 
   istream &input, 
   bool interactive, 
   int per_op_sleep_ms
@@ -145,27 +145,6 @@ int jitd_test(
       jitd.insert(buffer_cmd(toks));
     } CASE("remove") {
       jitd.remove(buffer_cmd(toks));
-
-    ///////////////// POLICY OPERATIONS /////////////////
-    } CASE("policy") {
-      string policyName;
-      toks >> policyName;
-      if(string("naive") == policyName){
-        jitd.setPolicy(
-          RewritePolicy<Record>(new RewritePolicyBase<Record>())
-        );
-      } else if(string("cracker") == policyName){
-        int minSize;
-        toks >> minSize;
-        jitd.setPolicy(
-          RewritePolicy<Record>(new CrackerPolicy<Record>(true, minSize, true, minSize))
-        );
-      } else if(string("inline") == policyName){
-        jitd.setPolicy(
-          RewritePolicy<Record>(new InlinePolicy<Record>())
-        );
-      }
-      cout << "Now using policy: " << jitd.getPolicy()->name() << endl;
 
     ///////////////// ACCESS OPERATIONS /////////////////    
     } CASE("scan") {

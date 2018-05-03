@@ -13,7 +13,6 @@
 #include "test.hpp"
 #include "rewrite.hpp"
 #include "policy.hpp"
-#include "policy/cracker.hpp"
 
 using namespace std;
 using namespace std::placeholders;
@@ -69,7 +68,6 @@ void cog_test(istream &input)
 {
   stack<CogHandle<Record> > stack;
   string line;
-  RewritePolicy<Record> policy(new RewritePolicyBase<Record>()); // dumb empty policy
   
   while(getline(input, line)){
     istringstream toks(line);
@@ -119,9 +117,7 @@ void cog_test(istream &input)
       stack.top()->printDebug(1);
     } else if(string("scan") == op) {
       CogHandle<Record> root = stack.top();
-      policy->beforeRootIterator(root);
-      policy->beforeIterator(root);
-      Iterator<Record> iter = root->iterator(policy);
+      Iterator<Record> iter = root->iterator();
       int row = 1;
       cout << "---------------" << endl;
       while(!iter->atEnd()){
@@ -134,9 +130,7 @@ void cog_test(istream &input)
       CogHandle<Record> root = stack.top();
       timeval start, end;
       gettimeofday(&start, NULL);
-      policy->beforeRootIterator(root);
-      policy->beforeIterator(root);
-      Iterator<Record> iter = root->iterator(policy);
+      Iterator<Record> iter = root->iterator();
       int row = 1;
       while(!iter->atEnd()){ iter->next(); row++; }
       gettimeofday(&end, NULL);
@@ -151,62 +145,6 @@ void cog_test(istream &input)
       }
       cout << "---------------" << endl;
       
-    ///////////////// REWRITE OPERATIONS /////////////////
-    } else if(string("split_array") == op) {
-      Record target;
-      toks >> target.key;
-      target.value = NULL;
-      
-      splitArray<Record>(target, stack.top());
-
-    } else if(string("rec_split_array") == op) {
-      Record target;
-      toks >> target.key;
-      target.value = NULL;
-      
-      recurToTargetTopDown<Record>(
-        std::bind(splitArray<Record>, target, _1),
-        target, 
-        stack.top()
-      );
-
-    } else if(string("sort_array") == op) {
-
-      sortArray<Record>(stack.top());
-
-    } else if(string("rec_sort_array") == op) {
-
-      recurTopDown<Record>(ref(sortArray<Record>), stack.top());
-
-    } else if(string("pushdown_array") == op) {
-
-      pushdownArray<Record>(stack.top());
-
-    } else if(string("rec_pushdown_array") == op) {
-
-      recurTopDown<Record>(ref(pushdownArray<Record>), stack.top());
-
-    } else if(string("tgt_pushdown_array") == op) {
-      Record target;
-      toks >> target.key;
-      target.value = NULL;
-      
-      recurToTargetTopDown<Record>(ref(pushdownArray<Record>), target, stack.top());
-
-    ///////////////// POLICY OPERATIONS /////////////////
-    } else if(string("policy") == op){
-      string policyName;
-      toks >> policyName;
-      if(string("naive") == policyName){
-        policy = RewritePolicy<Record>(new RewritePolicyBase<Record>());
-      } else if(string("cracker") == policyName){
-        int minSize;
-        toks >> minSize;
-        policy = RewritePolicy<Record>(new CrackerPolicy<Record>(minSize));
-      }
-      cout << "Now using policy '" << policyName << "' -> '"  
-           << policy->name() << "'" << endl;
-    
     ///////////////// OOOPS /////////////////
     } else {
       cerr << "Invalid Test Operation: " << op << endl;

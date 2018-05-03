@@ -1,13 +1,14 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 
 int main(int argc, char** argv)
 {
-  long int high_mark = 1000*1000*1000*10;
+  long int high_mark = 1000L*1000*1000*10;
   long int low_mark = 1000*1000*1000*1;
   int batch_size = 1000*1000*100;
   long int op_count = 100;

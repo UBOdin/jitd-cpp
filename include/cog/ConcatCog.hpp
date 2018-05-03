@@ -5,9 +5,9 @@ class ConcatCog : public Cog<Tuple>
     ConcatCog (CogHandle<Tuple> lhs, CogHandle<Tuple> rhs) :
       Cog<Tuple>(COG_CONCAT), lhs(lhs), rhs(rhs) {}
   
-    Iterator<Tuple> iterator(RewritePolicy<Tuple> p)
+    Iterator<Tuple> iterator()
     {
-      return Iterator<Tuple>(new MergeIterator<Tuple>(lhs, rhs, p));
+      return Iterator<Tuple>(new MergeIterator<Tuple>(lhs, rhs));
     }
     int size(){ return lhs->size() + rhs->size(); }
     

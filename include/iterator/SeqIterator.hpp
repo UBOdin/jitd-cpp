@@ -20,15 +20,13 @@ class SeqIterator : public IteratorBase<Tuple> {
     { 
       if(!lhsDone) {
         if(lhsIter.get() == NULL) { 
-          policy->beforeIterator(lhs);
-          lhsIter = lhs->iterator(policy);
+          lhsIter = lhs->iterator();
           lhsDone = lhsIter->atEnd();
         }
       }
       if(lhsDone)  {
         if(rhsIter.get() == NULL) { 
-          policy->beforeIterator(rhs);
-          rhsIter = rhs->iterator(policy);
+          rhsIter = rhs->iterator();
           rhsDone = rhsIter->atEnd();
         }
       }

@@ -33,7 +33,7 @@ template <class Tuple>
       
       if(rebuild){
         if((bt_split_threshold <= 0) || (cog->size() < bt_split_threshold)){
-          Buffer<Tuple> newBuff = cog->iterator(NAIVE_POLICY(Tuple))->toBuffer();
+          Buffer<Tuple> newBuff = cog->iterator()->toBuffer();
           
           h->put(
             CogPtr<Tuple>(
@@ -41,7 +41,7 @@ template <class Tuple>
             )
           );
         } else {
-          Iterator<Tuple> i = cog->iterator(NAIVE_POLICY(Tuple));
+          Iterator<Tuple> i = cog->iterator();
           Buffer<Tuple> newBuff = i->toBuffer(bt_split_threshold);
           CogPtr<Tuple> root(
               new SortedArrayCog<Tuple>(newBuff)

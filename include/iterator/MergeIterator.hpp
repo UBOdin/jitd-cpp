@@ -4,20 +4,16 @@ class MergeIterator : public IteratorBase<Tuple> {
   Iterator<Tuple> lhsIter, rhsIter;
   bool lhsDone, rhsDone;
   bool lhsBest;
-  RewritePolicy<Tuple> policy;
   
   public: 
     MergeIterator(
       CogHandle<Tuple> lhs, 
-      CogHandle<Tuple> rhs, 
-      RewritePolicy<Tuple> policy
-    ) : policy(policy) 
+      CogHandle<Tuple> rhs
+    )
     {
-      policy->beforeIterator(lhs);
-      lhsIter = lhs->iterator(policy);
+      lhsIter = lhs->iterator();
       lhsDone = lhsIter->atEnd();
-      policy->beforeIterator(rhs);
-      rhsIter = rhs->iterator(policy);
+      rhsIter = rhs->iterator();
       rhsDone = rhsIter->atEnd();
       updateBest();
     }

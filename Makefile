@@ -4,18 +4,14 @@ INCLUDE_PATH = include
 FILES = \
   src/data.o\
   src/rwlock.o\
-	src/jitd_tester.o\
-	src/cog_tester.o
 
 HEADERS = $(shell find ${INCLUDE_PATH} -name '*.hpp') \
           $(patsubst %.jitd, %.hpp, $(shell find ${INCLUDE_PATH} -name '*.jitd'))
 
-ifeq ($(shell uname), Darwin)
-CPP_FLAGS = \
-  -std=c++11  
-endif
+CPP_FLAGS = -std=c++11
+# -lpthread
 
-CPP = g++ -I ${INCLUDE_PATH} -g $(CPP_FLAGS)
+CPP = clang++ -I ${INCLUDE_PATH} -g $(CPP_FLAGS)
 
 all: driver workload_gen
 

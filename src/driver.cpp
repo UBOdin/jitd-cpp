@@ -1,11 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
+#include <string.h>
 
 #include "jitd.hpp"
 #include "test.hpp"
 
 using namespace std;
+
+#include "cog_tester.cpp"
+#include "jitd_tester.cpp"
 
 typedef enum {
   COG_TEST, JITD_TEST
@@ -17,7 +21,7 @@ int main(int argc, char **argv)
   TestMode mode = JITD_TEST;
   int i, t = 0;
   bool interactive;
-  JITD<Record> jitd;
+  JITD<Record, PureLocalPolicy<Record>> jitd;
   
   srand(time(NULL));
 //  sleep(1);
