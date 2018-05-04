@@ -33,39 +33,6 @@ class ArrayCog : public Cog<Tuple>
       { return start; }
     BufferElement<Tuple> getEnd()
       { return end; }
-    inline std::pair<CogPtr<Tuple>,CogPtr<Tuple>> splitCogs(const Tuple &pivot)
-    {
-      std::pair<Buffer<Tuple>,Buffer<Tuple>> splits = split(pivot);
-      std::pair<CogPtr<Tuple>,CogPtr<Tuple>> ret(
-        CogPtr<Tuple>(
-            new ArrayCog<Tuple>(
-              splits.first, 
-              splits.first->begin(), 
-              splits.first->end()
-            )),
-        CogPtr<Tuple>(
-            new ArrayCog<Tuple>(
-              splits.second, 
-              splits.second->begin(), 
-              splits.second->end()
-            ))
-      );
-      return ret;
-    }
-    CogPtr<Tuple> splitCog(const Tuple &pivot)
-    {
-      std::pair<CogPtr<Tuple>,CogPtr<Tuple>> splits = splitCogs(pivot);
-      CogHandle<Tuple> lhsH(new CogHandleBase<Tuple>(splits.first));
-      CogHandle<Tuple> rhsH(new CogHandleBase<Tuple>(splits.second));
-      return CogPtr<Tuple>(new BTreeCog<Tuple>(lhsH, rhsH, pivot));
-    }
-    CogPtr<Tuple> sortedCog()
-    {
-      Buffer<Tuple> sorted = sortedBuffer();
-      return CogPtr<Tuple>(new SortedArrayCog<Tuple>(
-        sorted, sorted->begin(), sorted->end()
-      ));
-    }
 
     int size(){ return end-start; }
     Iterator<Tuple> iterator(RewritePolicy<Tuple> p)

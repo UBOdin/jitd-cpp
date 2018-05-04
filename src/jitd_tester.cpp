@@ -143,6 +143,19 @@ int jitd_test(
     } CASE("remove") {
       jitd.remove(buffer_cmd(toks));
 
+    } CASE("policy") {
+      
+      CASE_1("cracksort"){
+        int threshold;
+        cin >> threshold;
+        jitd.getPolicy()->setScoreFunction(
+          std::bind(CrackOrSortArraysBigFirst<Record>, threshold, std::placeholders::_1)
+        );
+      } else {
+        cerr << "Invalid Policy" << op << endl;
+        exit(-1);
+      }
+
     ///////////////// ACCESS OPERATIONS /////////////////    
     } CASE("scan") {
       Iterator<Record> iter = jitd.iterator();

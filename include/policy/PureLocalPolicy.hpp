@@ -1,19 +1,26 @@
 
 typedef int Score;
 
-template <class Tuple>
-  using ScoreFunction = 
-    std::function<
+template<class Tuple>
+  using ScoreFunctionReturn =
       std::experimental::optional<
         std::pair<
           Score,
           Transform<Tuple>
         >
-      >(CogPtr<Tuple>)
-    >;
+      >;
+#define NO_TRANSFORMS                   ScoreFunctionReturn<Tuple>()
+#define TRANSFORM_WITH(score,function)  ScoreFunctionReturn<Tuple>(std::pair<Score, Transform<Tuple>>(score, function))
+
+
+template<class Tuple>
+  using ScoreFunction = std::function<ScoreFunctionReturn<Tuple>(CogPtr<Tuple>)>;
 
 template <class Tuple>
 struct Action {
+
+    Action(CogHandle<Tuple> target, Transform<Tuple> effect, Score score) : 
+      target(target), effect(effect), score(score) {}
     CogHandle<Tuple> target;
     Transform<Tuple> effect;
     Score score;
@@ -24,6 +31,11 @@ struct Action {
 template<class Tuple>
 inline bool operator<(const Action<Tuple> &a, const Action<Tuple> &b){ return a.score < b.score; }
 
+template<class Tuple>
+  ScoreFunctionReturn<Tuple> NoOpScoreFunction(CogPtr<Tuple> cog){ 
+    return ScoreFunctionReturn<Tuple>();
+  }
+
 
 template <class Tuple> class PureLocalPolicy {
   
@@ -32,10 +44,14 @@ template <class Tuple> class PureLocalPolicy {
 
   public:
 
-    PureLocalPolicy(CogHandle<Tuple> root)
-    {
-      enqueue_cog
+    PureLocalPolicy() : todos(), score(NoOpScoreFunction<Tuple>)
+    {}
+
+    void init(CogHandle<Tuple> root){
+      enqueueCog(root);
     }
+
+    void setScoreFunction(ScoreFunction<Tuple> newFn) { score = newFn; }
 
     inline bool act(){
       if(todos.empty()){ return false; }
@@ -43,31 +59,31 @@ template <class Tuple> class PureLocalPolicy {
       CogPtr<Tuple> target = next.target->get();
       CogPtr<Tuple> replacement = target;
       if(next.effect(replacement)){
-        target->apply_to_children(this->dequeue_cog);
+        target->apply_to_children(std::bind(&PureLocalPolicy::dequeueCog, this, std::placeholders::_1));
         next.target->put(replacement);
         enqueue_cog(next.target);
       }
       return true;
     }
 
-    inline void dequeue_cog(CogHandle<Tuple> target)
+    inline void dequeueCog(CogHandle<Tuple> target)
     {
       std::cerr << "dequeue cog unimplemented\n";
       exit(-1);
     }
 
-    inline void enqueue_cog(CogHandle<Tuple> target)
+    inline void enqueueCog(CogHandle<Tuple> target)
     {
-      CogPtr<Tuple> cog = target.get();
+      CogPtr<Tuple> cog = target->get();
       std::experimental::optional<std::pair<Score,Transform<Tuple>>> op = score(cog);
       if(op){
         todos.emplace(
           target,
-          op->second(),
-          op->first()
+          op->second,
+          op->first
         );        
       }
-      cog->apply_to_children(this->enqueue_cog);
+      cog->apply_to_children(std::bind(&PureLocalPolicy::enqueueCog, this, std::placeholders::_1));
     }
 
 

@@ -24,8 +24,8 @@ class JITD {
     JITD() : 
       root(new CogHandleBase<Tuple>(CogPtr<Tuple>(new ArrayCog<Tuple>(
         Buffer<Tuple>(new std::vector<Tuple>()))))),
-      policy(Policy(root)) 
-      {}
+      policy(Policy()) 
+      { policy.init(root); }
 
     bool idle()
     {

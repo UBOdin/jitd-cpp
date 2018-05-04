@@ -11,7 +11,6 @@
 #include "cog.hpp"
 #include "iterator.hpp"
 #include "test.hpp"
-#include "rewrite.hpp"
 #include "policy.hpp"
 
 using namespace std;

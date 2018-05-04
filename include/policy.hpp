@@ -7,5 +7,6 @@
 #include "transform.hpp"
 
 #include "policy/PureLocalPolicy.hpp"
+#include "policy/CrackOrSort.hpp"
 
 #endif //_POLICY_H_SHIELD
