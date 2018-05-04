@@ -35,16 +35,23 @@ class ArrayCog : public Cog<Tuple>
       { return end; }
 
     int size(){ return end-start; }
-    Iterator<Tuple> iterator(RewritePolicy<Tuple> p)
+    Iterator<Tuple> iterator()
     {
       return Iterator<Tuple>(new BufferIterator<Tuple>(sortedBuffer()));
     }
-    void apply_to_children(std::function<void(CogPtr<Tuple>)> fn) {}
+    void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
 
     void printDebug(int depth)
     {
       Cog<Tuple>::printPrefix(depth);
-      std::cout << "Array[" << (end-start) << " elements]" << std::endl;
+      std::cout << "Array[" << (end-start) << " elements] : { ";
+      BufferElement<Tuple> curr = start;
+      int i = 0;
+      for(; (i < 6) && (curr != end); ++curr, ++i){
+        std::cout << (i != 0 ? ", " : "") << curr->key;
+      }
+      if(curr != end) { std::cout << " ... "; }
+      std::cout << " }\n";
     }
     
     Buffer<Tuple> buffer;

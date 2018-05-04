@@ -1,2 +1,21 @@
-insert random 50 1000
-policy cracker 10
+init random 50 1000
+policy cracksort 100
+dump
+idle
+dump
+init random 50 1000
+policy cracksort 25
+dump
+idle
+dump
+idle
+dump
+idle
+dump
+idle
+dump
+idle
+dump
+idle
+dump
+idle

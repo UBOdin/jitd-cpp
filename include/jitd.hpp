@@ -29,7 +29,7 @@ class JITD {
 
     bool idle()
     {
-      policy.act();
+      return policy.act();
     }
     
     CogHandle<Tuple> getRoot()
@@ -46,6 +46,18 @@ class JITD {
       return r->iterator();
     }
     
+    void init(Buffer<Tuple> records)
+    {
+      root->put(CogPtr<Tuple>(new ArrayCog<Tuple>(records)));
+      policy.init(root);
+    }
+
+    void reinitPolicy()
+    {
+      policy.init(root);
+    }
+
+
     void insert(Buffer<Tuple> records)
     {
       // Create a template for the new root structure

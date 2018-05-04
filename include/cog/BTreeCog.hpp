@@ -10,13 +10,13 @@ class BTreeCog : public Cog<Tuple>
     ) : 
       Cog<Tuple>(COG_BTREE), lhs(lhs), sep(sep), rhs(rhs) {}
   
-    Iterator<Tuple> iterator(RewritePolicy<Tuple> p)
+    Iterator<Tuple> iterator()
     {
-      return Iterator<Tuple>(new SeqIterator<Tuple>(lhs, sep, rhs, p));
+      return Iterator<Tuple>(new SeqIterator<Tuple>(lhs, sep, rhs));
     }
 
     int size(){ return lhs->size() + rhs->size(); }
-    void apply_to_children(std::function<void(CogPtr<Tuple>)> fn) 
+    void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) 
     {
       fn(lhs);
       fn(rhs);

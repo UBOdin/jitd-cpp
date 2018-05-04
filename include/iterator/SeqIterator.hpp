@@ -4,16 +4,14 @@ class SeqIterator : public IteratorBase<Tuple> {
   Iterator<Tuple> lhsIter, rhsIter;
   bool lhsDone, rhsDone;
   const Tuple sep;
-  RewritePolicy<Tuple> policy;
   
   public: 
     SeqIterator(
       CogHandle<Tuple> lhs, 
       Tuple sep, 
-      CogHandle<Tuple> rhs, 
-      RewritePolicy<Tuple> policy
+      CogHandle<Tuple> rhs
     ) :
-      policy(policy), sep(sep), lhs(lhs), rhs(rhs), 
+      sep(sep), lhs(lhs), rhs(rhs), 
       lhsDone(lhs->size() < 1), rhsDone(rhs->size() < 1) {}
     
     inline void initNeeded()

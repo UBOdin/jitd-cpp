@@ -28,9 +28,9 @@ class SortedArrayCog : public Cog<Tuple>
     }
 
     int size(){ return end-start; }
-    void apply_to_children(std::function<void(CogPtr<Tuple>)> fn) {}
+    void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
 
-    Iterator<Tuple> iterator(RewritePolicy<Tuple> p)
+    Iterator<Tuple> iterator()
     {
       return Iterator<Tuple>(new BufferIterator<Tuple>(buffer, start, end));
     }

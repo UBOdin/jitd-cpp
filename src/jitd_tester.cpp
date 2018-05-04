@@ -138,23 +138,38 @@ int jitd_test(
       // comment, ignore
       
     ///////////////// MUTATOR OPERATIONS /////////////////
+    } CASE("init") {
+      jitd.init(buffer_cmd(toks));
     } CASE("insert") {
       jitd.insert(buffer_cmd(toks));
     } CASE("remove") {
       jitd.remove(buffer_cmd(toks));
 
+    ///////////////// POLICY OPERATIONS /////////////////    
     } CASE("policy") {
       
       CASE_1("cracksort"){
         int threshold;
-        cin >> threshold;
+        toks >> threshold;
+        cout << "Switching to Crack/Sort Policy with Threshold of " << threshold << endl;
         jitd.getPolicy()->setScoreFunction(
           std::bind(CrackOrSortArraysBigFirst<Record>, threshold, std::placeholders::_1)
         );
+        jitd.reinitPolicy();
       } else {
-        cerr << "Invalid Policy" << op << endl;
+        cerr << "Invalid Policy " << op << endl;
         exit(-1);
       }
+
+    } CASE("todos") {
+
+    } CASE("idle") {
+      timeval start, end;
+      jitd.getPolicy()->describeNext();
+      gettimeofday(&start, NULL);
+      jitd.idle();
+      gettimeofday(&end, NULL);
+      cout << "Idle Action: " << total_time(start, end) << " us" << endl;
 
     ///////////////// ACCESS OPERATIONS /////////////////    
     } CASE("scan") {

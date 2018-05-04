@@ -5,6 +5,7 @@
 #include <atomic>
 #include <iostream>
 #include <algorithm>
+#include <cassert>
 
 #include "data.hpp"
 
@@ -62,18 +63,18 @@ class Cog {
   
     virtual Iterator<Tuple> iterator()
     { 
-      std::cerr << "Cog.iterator() is unimplemented" << std::endl;
-      exit(-1);
+      std::cerr << type << std::endl;
+      assert(0);
     }
     virtual int size()
     {
-      std::cerr << "Cog.size() is unimplemented" << std::endl;
-      exit(-1);
+      std::cerr << type << std::endl;
+      assert(0);
     }    
     virtual void apply_to_children(std::function<void(std::shared_ptr<CogHandleBase<Tuple>>)> fn)
-    {
-      std::cerr << "Cog.apply_to_children() is unimplemented" << std::endl;
-      exit(-1);
+    { 
+      std::cerr << type << std::endl;
+      assert(0);
     }
     
     void printDebug() { printDebug(0); }
