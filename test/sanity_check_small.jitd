@@ -1,0 +1,21 @@
+init random 50 1000
+policy_set cracksort 100
+dump
+policy_act_once
+dump
+init random 50 1000
+policy cracksort 25
+dump
+policy_act_once
+dump
+policy_act_once
+dump
+policy_act_once
+dump
+policy_act_once
+dump
+policy_act_once
+dump
+policy_act_once
+dump
+policy_act_once

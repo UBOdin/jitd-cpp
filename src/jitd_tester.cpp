@@ -17,11 +17,6 @@
 
 using namespace std;
 
-double total_time(timeval &start, timeval &end)
-{
-  return (end.tv_sec - start.tv_sec) * 1000000.0 +
-         (end.tv_usec - start.tv_usec); 
-}
 
 void run_update_thread(
   JITD<Record,JITD_TEST_POLICY> *jitd, 
@@ -88,35 +83,6 @@ void run_test_thread(JITD<Record, JITD_TEST_POLICY> *jitd, string file, int per_
   cout << "Time[" << file << "]: " << t << " s" << endl;
 }
 
-RecordBuffer buffer_cmd(istream &toks)
-{
-  string fill;
-  toks >> fill;
-
-  if(string("random") == fill) {
-    int len, max;
-    toks >> len >> max;
-    return build_buffer(len,max);        
-
-  } else if(string("explicit") == fill) {
-    return load_buffer(toks);
-  
-  } else if(string("file") == fill) {
-    ifstream f;
-    string filename;
-    toks >> filename;
-    f.open(filename);
-    return load_buffer(f);        
-    
-  } else {
-    cerr << "Invalid Fill Mode: " << fill << endl;
-    exit(-1);
-  }
-}
-
-#define CASE_1(s) toks >> op; if(string(s) == op)
-#define CASE(s) else if(string(s) == op)
-  
 int jitd_test(
   JITD<Record, JITD_TEST_POLICY> &jitd, 
   istream &input, 
@@ -139,14 +105,29 @@ int jitd_test(
       
     ///////////////// MUTATOR OPERATIONS /////////////////
     } CASE("init") {
-      jitd.init(buffer_cmd(toks));
+      timeval start, end;
+      RecordBuffer data = buffer_cmd(toks);
+      gettimeofday(&start, NULL);
+      jitd.init(data);
+      gettimeofday(&end, NULL);
+      cout << "Init JITD: " << total_time(start, end) << " us" << endl;
     } CASE("insert") {
-      jitd.insert(buffer_cmd(toks));
+      timeval start, end;
+      RecordBuffer data = buffer_cmd(toks);
+      gettimeofday(&start, NULL);
+      jitd.insert(data);
+      gettimeofday(&end, NULL);
+      cout << "Insert into JITD: " << total_time(start, end) << " us" << endl;
     } CASE("remove") {
-      jitd.remove(buffer_cmd(toks));
+      timeval start, end;
+      RecordBuffer data = buffer_cmd(toks);
+      gettimeofday(&start, NULL);
+      jitd.remove(data);
+      gettimeofday(&end, NULL);
+      cout << "Delete from JITD: " << total_time(start, end) << " us" << endl;
 
     ///////////////// POLICY OPERATIONS /////////////////    
-    } CASE("policy") {
+    } CASE("policy_set") {
       
       CASE_1("cracksort"){
         int threshold;
@@ -161,15 +142,46 @@ int jitd_test(
         exit(-1);
       }
 
-    } CASE("todos") {
-
-    } CASE("idle") {
+    } CASE("policy_act_once") {
       timeval start, end;
       jitd.getPolicy()->describeNext();
+      JITD_TEST_POLICY *policy = jitd.getPolicy();
       gettimeofday(&start, NULL);
-      jitd.idle();
+      policy->act();
       gettimeofday(&end, NULL);
-      cout << "Idle Action: " << total_time(start, end) << " us" << endl;
+      cout << "Policy Action: " << total_time(start, end) << " us" << endl;
+
+    } CASE("policy_act_for") {
+      int target_steps;
+      double used_microseconds = 0;
+      timeval start, end;
+      JITD_TEST_POLICY *policy = jitd.getPolicy();
+
+      toks >> target_steps;
+
+      for(int x = 0; x < target_steps; x++){
+        gettimeofday(&start, NULL);
+        policy->act();
+        gettimeofday(&end, NULL);
+        used_microseconds += total_time(start, end);
+      }
+
+      cout << "Policy " << target_steps << " Actions: " << used_microseconds << " us" << endl;
+
+    } CASE("policy_act_until_done") {
+      bool more_work_to_do = true;
+      int steps_taken;
+      timeval start, end;
+      JITD_TEST_POLICY *policy = jitd.getPolicy();
+
+      gettimeofday(&start, NULL);
+      while(more_work_to_do){
+        steps_taken++;
+        more_work_to_do = policy->act();
+      }
+      gettimeofday(&end, NULL);
+      cout << "Policy " << steps_taken << " Actions: " << total_time(start, end) << " us" << endl;
+
 
     ///////////////// ACCESS OPERATIONS /////////////////    
     } CASE("scan") {

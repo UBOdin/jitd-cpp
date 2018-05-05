@@ -26,11 +26,6 @@ class JITD {
         Buffer<Tuple>(new std::vector<Tuple>()))))),
       policy(Policy()) 
       { policy.init(root); }
-
-    bool idle()
-    {
-      return policy.act();
-    }
     
     CogHandle<Tuple> getRoot()
     {

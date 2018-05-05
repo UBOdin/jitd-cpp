@@ -5,12 +5,14 @@ FILES = \
   src/data.o\
   src/rwlock.o\
   src/cog_tester.o\
-  src/jitd_tester.o
+  src/jitd_tester.o\
+  src/ds_tester.o
 
 HEADERS = $(shell find ${INCLUDE_PATH} -name '*.hpp') \
           $(patsubst %.jitd, %.hpp, $(shell find ${INCLUDE_PATH} -name '*.jitd'))
 
-CPP_FLAGS = --std=c++1y -g
+CPP_FLAGS = --std=c++1y 
+#-g
 LINKER_FLAGS = -lpthread
 
 CPP = clang++ -I ${INCLUDE_PATH} -g $(CPP_FLAGS)

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <istream>
 #include <unistd.h>
 #include <string.h>
 
@@ -9,8 +10,39 @@
 using namespace std;
 
 typedef enum {
-  COG_TEST, JITD_TEST
+  COG_TEST, JITD_TEST, MAP_TEST
 } TestMode;
+
+double total_time(timeval &start, timeval &end)
+{
+  return (end.tv_sec - start.tv_sec) * 1000000.0 +
+         (end.tv_usec - start.tv_usec); 
+}
+RecordBuffer buffer_cmd(istream &toks)
+{
+  string fill;
+  toks >> fill;
+
+  if(string("random") == fill) {
+    int len, max;
+    toks >> len >> max;
+    return build_buffer(len,max);        
+
+  } else if(string("explicit") == fill) {
+    return load_buffer(toks);
+  
+  } else if(string("file") == fill) {
+    ifstream f;
+    string filename;
+    toks >> filename;
+    f.open(filename);
+    return load_buffer(f);        
+    
+  } else {
+    cerr << "Invalid Fill Mode: " << fill << endl;
+    exit(-1);
+  }
+}
 
 int main(int argc, char **argv)
 {
@@ -28,6 +60,7 @@ int main(int argc, char **argv)
       string flag(argv[i]);
       if(string("-c") == flag){ mode = COG_TEST; }
       else if(string("-j") == flag){ mode = JITD_TEST; }
+      else if(string("-m") == flag){ mode = MAP_TEST; }
       else {
         cerr << "Invalid command line switch: " << flag << endl;
         exit(-1);
@@ -49,6 +82,8 @@ int main(int argc, char **argv)
           t = jitd_test(jitd, *src, interactive, 0);
           cout << "Time[" << argv[i] << "]: " << t << " s" << endl;
           break;
+        case MAP_TEST:
+          ds_test(*src);
       }
     }
   }

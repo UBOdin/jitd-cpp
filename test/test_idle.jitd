@@ -1,0 +1,15 @@
+policy_set cracksort 100000
+init random 100000 10000000
+dump
+policy_act_until_done
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+-- policy_act_for 10
+--dump
