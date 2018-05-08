@@ -236,33 +236,87 @@ int jitd_test(
         }
       }
     } CASE("random_scan") {
-      int time_in_ms, max_key, key_cnt;
-      long int scan_count = 0;
-      timeval start, end;
+      long int key;
+      int scan_cnt, max_scan_val;
+      //cout << "Found random scan" << endl;
+      toks >> scan_cnt >> max_scan_val;
+      //cout << " Scan cnt and max scan val are:" << scan_cnt <<","<< max_scan_val << endl;
+      timeval start_scan, end_scan;
       Record target;
       target.value = NULL;
-      toks >> time_in_ms >> max_key >> key_cnt;
-      gettimeofday(&start, NULL);
-      gettimeofday(&end, NULL);
-      
-      cout << "Scanning for " << time_in_ms << " s in [0,"
-           << max_key << ") -> " << key_cnt << " keys/read" << endl;
-      while(total_time(start, end) < time_in_ms*1000){
+      gettimeofday(&start_scan, NULL);
+      while(scan_cnt != 0)
+      {
+        //cout << "inside while loop" << endl;
         Iterator<Record> iter = jitd.iterator();
-        target.key = rand() % max_key;
+        target.key = rand() % max_scan_val; 
         iter->seek(target);
-        for(; key_cnt > 0; key_cnt--) { iter->next(); }
-        scan_count++;
-        
-        gettimeofday(&end, NULL);
+        --scan_cnt;
       }
-      cout << "Random Scan: " << scan_count << " scans over "
-           << total_time(start, end)/(1000*1000) << " s" << endl 
-           << "Rate: " 
-             << ((1000*1000*scan_count) / total_time(start, end))
-             << " scans/sec" << endl;
+      gettimeofday(&end_scan, NULL);
+      cout << "Scan JITD time in Random Mode: " << total_time(start_scan, end_scan) << " us" << endl;
+
+      // int time_in_ms, max_key, key_cnt;
+      // long int scan_count = 0;
+      // timeval start, end;
+      // Record target;
+      // target.value = NULL;
+      // toks >> time_in_ms >> max_key >> key_cnt;
+      // gettimeofday(&start, NULL);
+      // gettimeofday(&end, NULL);
+      
+      // cout << "Scanning for " << time_in_ms << " s in [0,"
+      //      << max_key << ") -> " << key_cnt << " keys/read" << endl;
+      // while(total_time(start, end) < time_in_ms*1000){
+      //   Iterator<Record> iter = jitd.iterator();
+      //   target.key = rand() % max_key;
+      //   iter->seek(target);
+      //   for(; key_cnt > 0; key_cnt--) { iter->next(); }
+      //   scan_count++;
+        
+      //   gettimeofday(&end, NULL);
+      // }
+      // cout << "Random Scan: " << scan_count << " scans over "
+      //      << total_time(start, end)/(1000*1000) << " s" << endl 
+      //      << "Rate: " 
+      //        << ((1000*1000*scan_count) / total_time(start, end))
+      //        << " scans/sec" << endl;
     
-    } CASE("spawn") {
+    } 
+    CASE("scan_heavy_hitter")
+    {
+      //cout << "in heavy hitter block" << endl;
+      int scan_cnt, max_scan_val, per_data, per_time;
+      Record target;
+      target.value = NULL;
+      toks >> scan_cnt >> max_scan_val >> per_data >> per_time;
+      //cout << scan_cnt << ","<< max_scan_val << "," << per_data << "," <<per_time << endl;
+      int key_range = floor((per_data/100.0)*max_scan_val);
+      int scan_cnt_within_range = floor((per_time/100.0)*scan_cnt);
+      timeval start_scan, end_scan;
+      gettimeofday(&start_scan, NULL);
+      while(scan_cnt !=0)
+      {
+        if((rand()%100)< per_time && scan_cnt_within_range != 0)
+        {
+            Iterator<Record> iter = jitd.iterator();
+            target.key = rand() % key_range;
+            iter->seek(target);
+            --scan_cnt_within_range;
+            --scan_cnt;
+        }
+        else
+        {
+            Iterator<Record> iter = jitd.iterator();
+            target.key = rand() % max_scan_val;
+            iter->seek(target);
+            --scan_cnt;
+        }
+      }
+      gettimeofday(&end_scan, NULL);
+      cout << "Scan JITD time in Heavy Hitter Mode: " << total_time(start_scan, end_scan) << " us" << endl;
+    }
+    CASE("spawn") {
       string file;
       toks >> file;
       threads.emplace_back(run_test_thread, &jitd, file, 0);
