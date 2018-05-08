@@ -21,3 +21,4 @@ workload
 *.o
 driver
 workload_gen
+Instruments/*

@@ -28,10 +28,11 @@ void ds_test(istream &input)
       for(BufferElement<Record> curr = data->begin(); curr != data->end(); ++curr){
         map_data.push_back(std::make_pair(curr->key, curr->value));
       }
-
+      //int i =0;
       timeval start_load, end_load;      
       gettimeofday(&start_load, NULL);
       for(vector<pair<Key,Value>>::iterator curr = map_data.begin(); curr != map_data.end(); curr++){
+       //cout << i++ << endl;
         ds->insert(*curr);
       }
       // for(BufferElement<Record> curr = data->begin(); curr != data->end(); ++curr){
