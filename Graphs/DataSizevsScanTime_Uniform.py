@@ -22,4 +22,4 @@ plt.legend(loc='upper right', fancybox=True, framealpha=0.5, frameon=False)
 plt.show()
 font = {'family' : 'Times New Roman',
         'size'   : 8}
-f.savefig("/Users/darshanabalakrishnan/Desktop/JITD-ICDE-2018/DataSizeVsScanTime(Uniform).pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
+f.savefig("/Users/darshanabalakrishnan/GitRepo/JITD_ICDE_2018F/jitd-cpp/Graphs/DataSizeVsScanTime_Uniform.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')

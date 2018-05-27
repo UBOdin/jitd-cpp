@@ -27,7 +27,7 @@ plt.title('JITD Uniform Workload')
 plt.show()
 font = {'family' : 'Times New Roman',
         'size'   : 8}
-f.savefig("/Users/darshanabalakrishnan/Desktop/JITD-ICDE-2018/policyTimeVsScanTimeVsCrackThresholdJITDUni.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
+f.savefig("/Users/darshanabalakrishnan/GitRepo/JITD_ICDE_2018F/jitd-cpp/Graphs/policyTimeVsScanTimeVsCrackThresholdJITDUni.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
 
 f = plt.figure(2)
 ct = np.array([100000, 1000000, 10000000, 100000000, 1000000000])
@@ -50,7 +50,7 @@ plt.title('MAP Uniform Workload')
 plt.show()
 font = {'family' : 'Times New Roman',
         'size'   : 8}
-f.savefig("/Users/darshanabalakrishnan/Desktop/JITD-ICDE-2018/policyTimeVsScanTimeVsCrackThresholdMAPUni.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
+f.savefig("/Users/darshanabalakrishnan/GitRepo/JITD_ICDE_2018F/jitd-cpp/Graphs/policyTimeVsScanTimeVsCrackThresholdMAPUni.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
 
 f = plt.figure(3)
 ct = np.array([100000, 1000000, 10000000, 100000000, 1000000000])
@@ -73,7 +73,7 @@ plt.title('JITD HeavyHitter Workload')
 plt.show()
 font = {'family' : 'Times New Roman',
         'size'   : 8}
-f.savefig("/Users/darshanabalakrishnan/Desktop/JITD-ICDE-2018/policyTimeVsScanTimeVsCrackThresholdJITDHH.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
+f.savefig("/Users/darshanabalakrishnan/GitRepo/JITD_ICDE_2018F/jitd-cpp/Graphs/policyTimeVsScanTimeVsCrackThresholdJITDHH.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
 
 f = plt.figure(4)
 ct = np.array([100000, 1000000, 10000000, 100000000, 1000000000])
@@ -96,4 +96,4 @@ plt.title('MAP HeavyHitter Workload')
 plt.show()
 font = {'family' : 'Times New Roman',
         'size'   : 8}
-f.savefig("/Users/darshanabalakrishnan/Desktop/JITD-ICDE-2018/policyTimeVsScanTimeVsCrackThresholdMAPHH.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
+f.savefig("/Users/darshanabalakrishnan/GitRepo/JITD_ICDE_2018F/jitd-cpp/Graphs/policyTimeVsScanTimeVsCrackThresholdMAPHH.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')

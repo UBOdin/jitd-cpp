@@ -14,8 +14,9 @@ y_m =np.array([3.91E+09,3.83E+09,3.93E+09,3.54E+09,3.93E+09])
 plt.plot(x, y_j, marker = 'o', label='JITD')
 plt.plot(x, y_m, marker = 'o',label = 'MAP')
 plt.xscale('log')
-plt.xlim(10000,10000000000)
-plt.ylim(10000,700000)
+plt.yscale('log')
+# plt.xlim(10000,10000000000)
+# plt.ylim(10,10000000000)
 # naming the x axis
 plt.xlabel('Crack Threshold')
 # naming the y axis
@@ -27,4 +28,4 @@ plt.legend(loc='upper right', fancybox=True, framealpha=0.5, frameon=False)
 plt.show()
 font = {'family' : 'Times New Roman',
         'size'   : 8}
-f.savefig("/Users/darshanabalakrishnan/Desktop/JITD-ICDE-2018/CrackThresholdVsLoadTime(Uniform).pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
+f.savefig("/Users/darshanabalakrishnan/GitRepo/JITD_ICDE_2018F/jitd-cpp/Graphs/CrackThresholdVsLoadTime_Uniform.pdf",dpi = '300', bbox_inches='tight', format = 'pdf',transparent= 'true')
