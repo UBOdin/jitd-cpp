@@ -1,0 +1,7 @@
+Switching to Crack/Sort Policy with Threshold of 100000
+Init JITD: 28 us
+gROOT [1000000000 elements]
+  Array[1000000000 elements] : { 663881903, 252829440, 5813461, 575798542, 971662, 860038067 ...  }
+Policy -1474554548 Actions: 2.02327e+09 us
+Scan JITD time in Random Mode: 645476 us
+Time[test/jitd_uniform_scan_5.jitd]: 2059 s

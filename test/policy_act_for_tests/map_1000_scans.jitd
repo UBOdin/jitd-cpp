@@ -1,0 +1,3 @@
+init random 1000000000 1000000000
+dump
+random_scan 1000 1000000000

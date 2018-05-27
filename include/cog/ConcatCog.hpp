@@ -23,7 +23,12 @@ class ConcatCog : public Cog<Tuple>
       lhs->printDebug(depth+1);
       rhs->printDebug(depth+1);
     }
-    
+     bool getKey(Tuple key)
+    {
+      std::cout<<"In Concat getKey()"<<std::endl;
+      return false;
+      //Not Implemented...
+    }
     CogHandle<Tuple> lhs;
     CogHandle<Tuple> rhs;
 };

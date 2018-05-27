@@ -31,7 +31,12 @@ class DeleteCog : public Cog<Tuple>
       source->printDebug(depth+1);
       deleted->printDebug(depth+1);
     }
-    
+     bool getKey(Tuple key)
+    {
+      std::cout<<"In Delete getKey()"<<std::endl;
+      return false;
+      //Not Implemented...
+    }
     CogHandle<Tuple> source;
     CogHandle<Tuple> deleted;
   

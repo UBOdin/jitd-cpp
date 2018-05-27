@@ -53,7 +53,23 @@ class ArrayCog : public Cog<Tuple>
       if(curr != end) { std::cout << " ... "; }
       std::cout << " }\n";
     }
-    
+     bool getKey(Tuple key,BufferElement<Tuple> &result)
+    {
+      //std::cout<<"In Array getKey()"<<std::endl;
+      BufferElement<Tuple> curr = start;
+      bool keyFound = false;
+      for(;curr!=end;++curr)
+      {
+        if(curr->key == key.key)
+        {
+          keyFound = true;
+          //std::cout<<"the key is found" << curr->key << std::endl;
+          result = curr;
+          break;
+        }
+      }
+      return keyFound; 
+    }
     Buffer<Tuple> buffer;
     BufferElement<Tuple> start;
     BufferElement<Tuple> end;

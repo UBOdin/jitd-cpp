@@ -29,6 +29,22 @@ class BTreeCog : public Cog<Tuple>
       lhs->printDebug(depth+1);
       rhs->printDebug(depth+1);
     }
+    bool getKey(Tuple key, BufferElement<Tuple> &result)
+    {
+     
+      //std::cout<<"In BTree getKey";
+      if(key < sep)
+      {
+        //std::cout<<"In LHS :the sep value is "<< sep <<std::endl;
+        return lhs->getKey(key,result);
+      }
+      else
+      {
+         //std::cout<<"In RHS :the sep value is "<< sep <<std::endl;
+        return rhs->getKey(key,result);
+      }
+
+    }
     const Tuple sep;
     const CogHandle<Tuple> lhs;
     const CogHandle<Tuple> rhs;

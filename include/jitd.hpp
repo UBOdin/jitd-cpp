@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <atomic>
+#include <experimental/optional>
 #import <queue>
 
 
@@ -103,6 +104,16 @@ class JITD {
       return std::atomic_load(&root)->size();
     }
 
+    void get(Record key)
+    {
+      //std::cout<<"the getter method" << std::endl;
+      CogHandle<Tuple> r = std::atomic_load(&root);
+      //std::cout << "the type of root is " << r->type()<<std::endl;
+      bool keyFound = false;
+      BufferElement<Tuple> result;
+      keyFound = r->getKey(key,result);
+
+    }
   private: 
     
     // Replace root with newRoot.  placeholder is set to the value of root

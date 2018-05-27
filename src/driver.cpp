@@ -52,7 +52,8 @@ int main(int argc, char **argv)
   bool interactive;
   JITD<Record, PureLocalPolicy<Record>> jitd;
   
-  srand(time(NULL));
+  srand(RAND_MAX);
+  cout <<"using rand max"<<endl;
 //  sleep(1);
   for(i = 1; i < argc; i++){
     ifstream srcF;

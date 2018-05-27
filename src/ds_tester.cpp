@@ -28,11 +28,10 @@ void ds_test(istream &input)
       for(BufferElement<Record> curr = data->begin(); curr != data->end(); ++curr){
         map_data.push_back(std::make_pair(curr->key, curr->value));
       }
-      //int i =0;
+
       timeval start_load, end_load;      
       gettimeofday(&start_load, NULL);
       for(vector<pair<Key,Value>>::iterator curr = map_data.begin(); curr != map_data.end(); curr++){
-       //cout << i++ << endl;
         ds->insert(*curr);
       }
       // for(BufferElement<Record> curr = data->begin(); curr != data->end(); ++curr){
@@ -57,10 +56,10 @@ void ds_test(istream &input)
         gettimeofday(&start_scan, NULL);
         while(scan_cnt != 0)
         {
-          // key = rand() % max_scan_val;
+          key = rand() % max_scan_val;
           // cout << "while loop number : " << scan_cnt << endl;
-          //cout<< "searching for key : " << key << endl;
-          ds->lower_bound(rand() % max_scan_val);
+          cout<< "searching for key : " << key << endl;
+          ds->lower_bound(key);
           --scan_cnt;
 
         }

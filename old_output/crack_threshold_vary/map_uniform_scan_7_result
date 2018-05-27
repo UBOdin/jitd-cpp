@@ -1,0 +1,5 @@
+Skipping irrelevant operation: policy_set cracksort 10000000
+Load Map: 3.92647e+09 us
+Scan Map time in Random Mode: 408730 us
+Skipping irrelevant operation: dump
+Skipping irrelevant operation: policy_act_until_done

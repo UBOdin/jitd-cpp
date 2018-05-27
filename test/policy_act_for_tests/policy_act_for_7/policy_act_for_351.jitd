@@ -1,0 +1,5 @@
+policy_set cracksort 10000000
+init random 1000000000 1000000000
+dump
+policy_act_for 351
+random_scan 1000 1000000000

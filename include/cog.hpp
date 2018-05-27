@@ -6,7 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cassert>
-
+#include <experimental/optional>
 #include "data.hpp"
 
 //
@@ -83,7 +83,11 @@ class Cog {
       printPrefix(depth);
       std::cout << "???" << std::endl;
     }
-    
+    virtual bool getKey(Record key, BufferElement<Tuple> &result)
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
     CogType type;
 };
 
@@ -120,6 +124,7 @@ class CogHandleBase {
     inline CogType         type()                { return get()->type; }
     inline void            printDebug()          { get()->printDebug(); }
     inline void            printDebug(int depth) { get()->printDebug(depth); }
+    inline bool            getKey(Record key, BufferElement<Tuple> &result) {return get()->getKey(key,result);} 
 };
 
 template <class Tuple>

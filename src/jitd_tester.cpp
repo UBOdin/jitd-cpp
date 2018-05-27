@@ -11,7 +11,7 @@
 #include <random>
 #include <sys/time.h>
 #include <queue>
-
+#include <experimental/optional>
 #include "jitd.hpp"
 #include "test.hpp"
 
@@ -152,7 +152,7 @@ int jitd_test(
       cout << "Policy Action: " << total_time(start, end) << " us" << endl;
 
     } CASE("policy_act_for") {
-      int target_steps;
+      long target_steps;
       double used_microseconds = 0;
       timeval start, end;
       JITD_TEST_POLICY *policy = jitd.getPolicy();
@@ -166,11 +166,11 @@ int jitd_test(
         used_microseconds += total_time(start, end);
       }
 
-      cout << "Policy " << target_steps << " Actions: " << used_microseconds << " us" << endl;
+      cout << "Policy_act_for_ " << target_steps << " Actions: " << used_microseconds << " us" << endl;
 
     } CASE("policy_act_until_done") {
       bool more_work_to_do = true;
-      int steps_taken;
+      long steps_taken;
       timeval start, end;
       JITD_TEST_POLICY *policy = jitd.getPolicy();
 
@@ -180,7 +180,7 @@ int jitd_test(
         more_work_to_do = policy->act();
       }
       gettimeofday(&end, NULL);
-      cout << "Policy " << steps_taken << " Actions: " << total_time(start, end) << " us" << endl;
+      cout << "policy_act_until_done " << steps_taken << " Actions: " << total_time(start, end) << " us" << endl;
 
 
     ///////////////// ACCESS OPERATIONS /////////////////    
@@ -235,54 +235,77 @@ int jitd_test(
           iter->seek(target);
         }
       }
-    } CASE("random_scan") {
+     } //CASE("random_scan_old") {
+    //   long int key;
+    //   int scan_cnt, max_scan_val;
+    //   //cout << "Found random scan" << endl;
+    //   toks >> scan_cnt >> max_scan_val;
+    //   //cout << " Scan cnt and max scan val are:" << scan_cnt <<","<< max_scan_val << endl;
+    //   timeval start_scan, end_scan;
+    //   Record target;
+    //   target.value = NULL;
+    //   gettimeofday(&start_scan, NULL);
+    //   while(scan_cnt != 0)
+    //   {
+    //     //cout << "inside while loop" << endl;
+    //     Iterator<Record> iter = jitd.iterator();
+    //     target.key = rand() % max_scan_val; 
+    //     iter->seek(target);
+    //     --scan_cnt;
+    //   }
+    //   gettimeofday(&end_scan, NULL);
+    //   cout << "Scan JITD time in Random Mode: " << total_time(start_scan, end_scan) << " us" << endl;
+
+    //   // int time_in_ms, max_key, key_cnt;
+    //   // long int scan_count = 0;
+    //   // timeval start, end;
+    //   // Record target;
+    //   // target.value = NULL;
+    //   // toks >> time_in_ms >> max_key >> key_cnt;
+    //   // gettimeofday(&start, NULL);
+    //   // gettimeofday(&end, NULL);
+      
+    //   // cout << "Scanning for " << time_in_ms << " s in [0,"
+    //   //      << max_key << ") -> " << key_cnt << " keys/read" << endl;
+    //   // while(total_time(start, end) < time_in_ms*1000){
+    //   //   Iterator<Record> iter = jitd.iterator();
+    //   //   target.key = rand() % max_key;
+    //   //   iter->seek(target);
+    //   //   for(; key_cnt > 0; key_cnt--) { iter->next(); }
+    //   //   scan_count++;
+        
+    //   //   gettimeofday(&end, NULL);
+    //   // }
+    //   // cout << "Random Scan: " << scan_count << " scans over "
+    //   //      << total_time(start, end)/(1000*1000) << " s" << endl 
+    //   //      << "Rate: " 
+    //   //        << ((1000*1000*scan_count) / total_time(start, end))
+    //   //        << " scans/sec" << endl;
+    
+    // } 
+    CASE("random_scan")
+    {
+      //cout << "point scan detected"<<endl;
       long int key;
       int scan_cnt, max_scan_val;
-      //cout << "Found random scan" << endl;
       toks >> scan_cnt >> max_scan_val;
-      //cout << " Scan cnt and max scan val are:" << scan_cnt <<","<< max_scan_val << endl;
-      timeval start_scan, end_scan;
       Record target;
       target.value = NULL;
-      gettimeofday(&start_scan, NULL);
+      timeval start_scan, end_scan;
+      gettimeofday(&start_scan, NULL); 
       while(scan_cnt != 0)
       {
         //cout << "inside while loop" << endl;
-        Iterator<Record> iter = jitd.iterator();
+        
         target.key = rand() % max_scan_val; 
-        iter->seek(target);
+        cout << "the key being scanned for : " << target.key << endl;
+        jitd.get(target);
         --scan_cnt;
       }
       gettimeofday(&end_scan, NULL);
       cout << "Scan JITD time in Random Mode: " << total_time(start_scan, end_scan) << " us" << endl;
 
-      // int time_in_ms, max_key, key_cnt;
-      // long int scan_count = 0;
-      // timeval start, end;
-      // Record target;
-      // target.value = NULL;
-      // toks >> time_in_ms >> max_key >> key_cnt;
-      // gettimeofday(&start, NULL);
-      // gettimeofday(&end, NULL);
-      
-      // cout << "Scanning for " << time_in_ms << " s in [0,"
-      //      << max_key << ") -> " << key_cnt << " keys/read" << endl;
-      // while(total_time(start, end) < time_in_ms*1000){
-      //   Iterator<Record> iter = jitd.iterator();
-      //   target.key = rand() % max_key;
-      //   iter->seek(target);
-      //   for(; key_cnt > 0; key_cnt--) { iter->next(); }
-      //   scan_count++;
-        
-      //   gettimeofday(&end, NULL);
-      // }
-      // cout << "Random Scan: " << scan_count << " scans over "
-      //      << total_time(start, end)/(1000*1000) << " s" << endl 
-      //      << "Rate: " 
-      //        << ((1000*1000*scan_count) / total_time(start, end))
-      //        << " scans/sec" << endl;
-    
-    } 
+    }
     CASE("scan_heavy_hitter")
     {
       //cout << "in heavy hitter block" << endl;
@@ -299,17 +322,17 @@ int jitd_test(
       {
         if((rand()%100)< per_time && scan_cnt_within_range != 0)
         {
-            Iterator<Record> iter = jitd.iterator();
+         
             target.key = rand() % key_range;
-            iter->seek(target);
+            jitd.get(target);
             --scan_cnt_within_range;
             --scan_cnt;
         }
         else
         {
-            Iterator<Record> iter = jitd.iterator();
+            
             target.key = rand() % max_scan_val;
-            iter->seek(target);
+            jitd.get(target);
             --scan_cnt;
         }
       }

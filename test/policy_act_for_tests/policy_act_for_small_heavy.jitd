@@ -1,0 +1,5 @@
+policy_set cracksort 3
+init random 10 10
+dump
+policy_act_for 2
+scan_heavy_hitter 5 10 30 80
