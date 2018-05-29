@@ -6,6 +6,7 @@ FILES = \
   src/rwlock.o\
   src/cog_tester.o\
   src/jitd_tester.o\
+  src/simulator_tester.o\
   src/ds_tester.o
 
 HEADERS = $(shell find ${INCLUDE_PATH} -name '*.hpp') \

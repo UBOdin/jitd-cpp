@@ -1,0 +1,2 @@
+init random 10 10
+MEASURE_UNSORTED_SCAN_TIME

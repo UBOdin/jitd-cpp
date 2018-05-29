@@ -50,5 +50,5 @@ RecordBuffer buffer_cmd(std::istream &toks);
 int jitd_test(JITD<Record, JITD_TEST_POLICY> &jitd, std::istream &input, bool interactive, int per_op_sleep_ms);
 void cog_test(std::istream &input);
 void ds_test(std::istream &input);
-
+void sm_test(std::istream &input);
 #endif // _TEST_H_SHIELD

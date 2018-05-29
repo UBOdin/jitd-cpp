@@ -10,7 +10,7 @@
 using namespace std;
 
 typedef enum {
-  COG_TEST, JITD_TEST, MAP_TEST
+  COG_TEST, JITD_TEST, MAP_TEST, SIM_TEST
 } TestMode;
 
 double total_time(timeval &start, timeval &end)
@@ -26,6 +26,7 @@ RecordBuffer buffer_cmd(istream &toks)
   if(string("random") == fill) {
     int len, max;
     toks >> len >> max;
+    //std::cout << "length:"<<len <<"Max:"<<max<<std::endl;
     return build_buffer(len,max);        
 
   } else if(string("explicit") == fill) {
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
   JITD<Record, PureLocalPolicy<Record>> jitd;
   
   srand(RAND_MAX);
-  cout <<"using rand max"<<endl;
+  //cout <<"using rand max"<<endl;
 //  sleep(1);
   for(i = 1; i < argc; i++){
     ifstream srcF;
@@ -62,6 +63,7 @@ int main(int argc, char **argv)
       if(string("-c") == flag){ mode = COG_TEST; }
       else if(string("-j") == flag){ mode = JITD_TEST; }
       else if(string("-m") == flag){ mode = MAP_TEST; }
+      else if(string("-s") == flag){ mode = SIM_TEST; }
       else {
         cerr << "Invalid command line switch: " << flag << endl;
         exit(-1);
@@ -85,6 +87,8 @@ int main(int argc, char **argv)
           break;
         case MAP_TEST:
           ds_test(*src);
+        case SIM_TEST:
+          sm_test(*src);  
       }
     }
   }
