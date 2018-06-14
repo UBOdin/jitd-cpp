@@ -7,7 +7,7 @@ template<class Tuple>
     
       int min_score;
       //std::cout << "Cog is a BTree" << std::endl;
-      cog->printDebug(3);
+      //cog->printDebug(3);
       //int size = cog->size();
       
       int lhs_size = cog->lsize();

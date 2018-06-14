@@ -176,6 +176,18 @@ int jitd_test(
         jitd.reinitPolicy();
 
       }
+      CASE("divide")
+      {
+        policy_name = "divide";
+        int threshold;
+        toks >> threshold;
+        cout << "Switching to Divide-Only Policy with Threshold of " << threshold << endl;
+        jitd.getPolicy()->setScoreFunction(
+          std::bind(DivideArray<Record>, threshold, std::placeholders::_1)
+        );
+        jitd.reinitPolicy();
+
+      }
       else {
         cerr << "Invalid Policy " << op << endl;
         exit(-1);

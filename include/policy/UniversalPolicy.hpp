@@ -77,9 +77,9 @@ template <class Tuple> class UniversalPolicy {
 
     inline bool act(std::string policy_name){
       //std::cout<<"Universal Policy"<<std::endl;
-      if(policy_name == "crack")
+      if(policy_name == "crack" || policy_name == "sort" || policy_name == "divide" || policy_name == "merge")
       {
-        if(todos.empty()){ std::cout<<"Todos crack empty"<<std::endl;return false; }
+        if(todos.empty()){ std::cout<<"Todos empty"<<std::endl;return false; }
         Action<Tuple> next = todos.top(); 
         //CogType val = (next.target->type());
         //std::cout<<"the PQ elem Target: " << val << "; Score: " << next.score <<std::endl;
@@ -94,39 +94,40 @@ template <class Tuple> class UniversalPolicy {
         }
         return true;
       }
-      if(policy_name == "sort")
-      {
-        if(todos.empty()){ std::cout<<"Todos sort empty"<<std::endl;return false; }
-        Action<Tuple> next = todos.top(); 
-        //CogType val = (next.target->type());
-        //std::cout<<"the PQ elem Target: " << val << "; Score: " << next.score <<std::endl;
-        todos.pop();
-        CogPtr<Tuple> target = next.target->get();
-        CogPtr<Tuple> replacement = target;
-        if(next.effect(replacement)){
-          target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
-          next.target->put(replacement);
-          enqueueCog(next.target);
+      // if(policy_name == "sort")
+      // {
+      //   if(todos.empty()){ std::cout<<"Todos sort empty"<<std::endl;return false; }
+      //   Action<Tuple> next = todos.top(); 
+      //   //CogType val = (next.target->type());
+      //   //std::cout<<"the PQ elem Target: " << val << "; Score: " << next.score <<std::endl;
+      //   todos.pop();
+      //   CogPtr<Tuple> target = next.target->get();
+      //   CogPtr<Tuple> replacement = target;
+      //   if(next.effect(replacement)){
+      //     target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
+      //     next.target->put(replacement);
+      //     enqueueCog(next.target);
 
-        }
-        return true;
-      }
-      if(policy_name == "merge")
-      {
-        //std::cout << "merging...." << std::endl;
-        if(todos.empty()){ std::cout<<"Todos merge empty"<<std::endl;return false; }
-        Action<Tuple> next = todos.top(); 
-        todos.pop();
-        CogPtr<Tuple> target = next.target->get();
-        CogPtr<Tuple> replacement = target;
-        if(next.effect(replacement)){
-          target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
-          next.target->put(replacement);
-          enqueueCog(next.target);
+      //   }
+      //   return true;
+      // }
+      // if(policy_name == "merge")
+      // {
+      //   //std::cout << "merging...." << std::endl;
+      //   if(todos.empty()){ std::cout<<"Todos merge empty"<<std::endl;return false; }
+      //   Action<Tuple> next = todos.top(); 
+      //   todos.pop();
+      //   CogPtr<Tuple> target = next.target->get();
+      //   CogPtr<Tuple> replacement = target;
+      //   if(next.effect(replacement)){
+      //     target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
+      //     next.target->put(replacement);
+      //     enqueueCog(next.target);
 
-        }
-        return true;
-      }
+      //   }
+      //   return true;
+      // }
+
       else
       {
         std::cout <<"No valid atomic policy"<<std::endl;
@@ -139,11 +140,6 @@ template <class Tuple> class UniversalPolicy {
       std::cerr << "dequeue cog unimplemented\n";
       assert(0);
     }
-    // inline void dequeueCogMerge(CogHandle<Tuple> target)
-    // {
-    //   std::cerr << "dequeue cog unimplemented\n";
-    //   assert(0);
-    // }
   
     inline void enqueueCog(CogHandle<Tuple> target)
     {
@@ -160,21 +156,6 @@ template <class Tuple> class UniversalPolicy {
       }
       cog->apply_to_children(std::bind(&UniversalPolicy::enqueueCog, this, std::placeholders::_1));
     }
-    // inline void enqueueCogMerge(CogHandle<Tuple> target)
-    // {
-    //   // std::cerr << "Enqueue " << target << std::endl;
-    //   CogPtr<Tuple> cog = target->get();
-    //   std::experimental::optional<std::pair<Score,Transform<Tuple>>> op = score(cog);
-    //   //std::cout << "In enqueue cog emplace The target is  " << target <<"The transform is "<< op->second.get() <<"The score is " << op->first << std::endl;
-    //   if(op){
-    //     mergePQ.emplace(
-    //       target,
-    //       op->second,
-    //       op->first
-    //     );        
-    //   }
-    //   cog->apply_to_children(std::bind(&UniversalPolicy::enqueueCogMerge, this, std::placeholders::_1));
-    // }
 
     
     inline void describeNext()

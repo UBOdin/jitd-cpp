@@ -12,7 +12,6 @@ template<class Tuple>
 
 
     if(size > threshold){
-      // std::cerr << "    ^--- Decided on Crack\n";
       //std::cout <<"In sort but size > threshold" << size << threshold << std::endl;
       //return TRANSFORM_WITH(size, randomSplitArray<Tuple>);
       return NO_TRANSFORMS;

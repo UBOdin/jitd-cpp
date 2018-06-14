@@ -1,5 +1,3 @@
-
-
 template<class Tuple>
   ScoreFunctionReturn<Tuple> DivideArray(int threshold, CogPtr<Tuple> cog){ 
     //Divide is applicable only to array cog
@@ -18,9 +16,8 @@ template<class Tuple>
       std::cout << "In Divide policy" << std::endl;
       return TRANSFORM_WITH(size, divideArray<Tuple>);
     } else {
-      // std::cerr << "    ^--- Decided on Sort\n";
-      std::cout<<"Decided on Sort as size < threshold"<<std::endl;
-      return TRANSFORM_WITH(size, sortArray<Tuple>);
+      std::cout<<" size < threshold"<<std::endl;
+      return NO_TRANSFORMS;
     }
 
   }
