@@ -1,0 +1,11 @@
+policy_set crack 2
+init random 3 10
+dump
+policy_act_until_done
+dump
+policy_set sort 2
+policy_act_until_done
+dump
+policy_set merge 2
+policy_act_until_done
+dump
