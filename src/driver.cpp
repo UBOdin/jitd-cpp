@@ -51,7 +51,7 @@ int main(int argc, char **argv)
   TestMode mode = JITD_TEST;
   int i, t = 0;
   bool interactive;
-  JITD<Record, PureLocalPolicy<Record>> jitd;
+  JITD<Record, UniversalPolicy<Record>> jitd;
   
   srand(RAND_MAX);
   //cout <<"using rand max"<<endl;

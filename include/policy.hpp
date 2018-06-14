@@ -8,5 +8,10 @@
 
 #include "policy/PureLocalPolicy.hpp"
 #include "policy/CrackOrSort.hpp"
+#include "policy/Divide.hpp"
+#include "policy/UniversalPolicy.hpp"
+#include "policy/CrackArray.hpp"
+#include "policy/SortArray.hpp"
+#include "policy/MergeArray.hpp"
 
 #endif //_POLICY_H_SHIELD

@@ -10,6 +10,10 @@ class ConcatCog : public Cog<Tuple>
       return Iterator<Tuple>(new MergeIterator<Tuple>(lhs, rhs));
     }
     int size(){ return lhs->size() + rhs->size(); }
+    int lsize(){return lhs->size();}
+    int rsize(){return rhs->size();}
+    // CogHandle<Tuple> return_lhs(){return lhs;}
+    // CogHandle<Tuple> return_rhs(){return rhs;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) 
     {
       fn(lhs);
@@ -25,7 +29,7 @@ class ConcatCog : public Cog<Tuple>
     }
      bool getKey(Tuple key)
     {
-      std::cout<<"In Concat getKey()"<<std::endl;
+      std::cout<<"In Concat getKey() not implemented"<<std::endl;
       return false;
       //Not Implemented...
     }

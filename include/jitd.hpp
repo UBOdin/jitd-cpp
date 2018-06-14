@@ -51,6 +51,7 @@ class JITD {
     void reinitPolicy()
     {
       policy.init(root);
+      
     }
 
 

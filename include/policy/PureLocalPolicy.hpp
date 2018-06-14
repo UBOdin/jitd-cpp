@@ -26,6 +26,7 @@ struct Action {
     Score score;
 
     inline const bool operator<(const Action<Tuple> &other){ return score < other.score; }
+    
   };
 
 template<class Tuple>
@@ -57,13 +58,17 @@ template <class Tuple> class PureLocalPolicy {
 
     inline bool act(){
       if(todos.empty()){ return false; }
-      Action<Tuple> next = todos.top(); todos.pop();
+      Action<Tuple> next = todos.top(); 
+      // CogType val = (next.effect->type());
+      // std::cout<<"the PQ elem Target: " << val << "; Score: " << next.score <<std::endl;
+      todos.pop();
       CogPtr<Tuple> target = next.target->get();
       CogPtr<Tuple> replacement = target;
       if(next.effect(replacement)){
         target->apply_to_children(std::bind(&PureLocalPolicy::dequeueCog, this, std::placeholders::_1));
         next.target->put(replacement);
         enqueueCog(next.target);
+
       }
       return true;
     }
@@ -79,6 +84,7 @@ template <class Tuple> class PureLocalPolicy {
       // std::cerr << "Enqueue " << target << std::endl;
       CogPtr<Tuple> cog = target->get();
       std::experimental::optional<std::pair<Score,Transform<Tuple>>> op = score(cog);
+      //std::cout << "In enqueue cog emplace The target is  " << target <<"The transform is "<< op->second.get() <<"The score is " << op->first << std::endl;
       if(op){
         todos.emplace(
           target,

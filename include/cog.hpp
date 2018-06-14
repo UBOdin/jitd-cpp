@@ -70,7 +70,22 @@ class Cog {
     {
       std::cerr << type << std::endl;
       assert(0);
-    }    
+    }
+     virtual int lsize()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
+      virtual int rsize()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    } 
+    virtual Buffer<Tuple> getBuffer()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    } 
     virtual void apply_to_children(std::function<void(std::shared_ptr<CogHandleBase<Tuple>>)> fn)
     { 
       std::cerr << type << std::endl;
@@ -121,10 +136,13 @@ class CogHandleBase {
     
     inline Iterator<Tuple> iterator()            { return get()->iterator(); }
     inline int             size()                { return get()->size(); }
+    inline int             lsize()               { return get()->lsize(); }
+    inline int             rsize()               { return get()->rsize(); }
     inline CogType         type()                { return get()->type; }
     inline void            printDebug()          { get()->printDebug(); }
     inline void            printDebug(int depth) { get()->printDebug(depth); }
     inline bool            getKey(Record key, BufferElement<Tuple> &result) {return get()->getKey(key,result);} 
+    inline Buffer<Tuple>   getBuffer() {return get()->getBuffer();}
 };
 
 template <class Tuple>

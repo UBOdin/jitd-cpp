@@ -1,8 +1,8 @@
 
 
 template<class Tuple>
-  ScoreFunctionReturn<Tuple> CrackOrSortArraysBigFirst(int threshold, CogPtr<Tuple> cog){ 
-    //std::cout<<"In crack Sort"<<std::endl;
+  ScoreFunctionReturn<Tuple> DivideArray(int threshold, CogPtr<Tuple> cog){ 
+    //Divide is applicable only to array cog
     if(cog->type != COG_ARRAY){ 
       // std::cerr << "Crack or Sort: Not an Array\n";
       return NO_TRANSFORMS; 
@@ -10,16 +10,16 @@ template<class Tuple>
     
     int size = cog->size();
     // std::cerr << "Crack or Sort: Size " << size << " / " << threshold << std::endl;
-    cog->printDebug(3);
+    // cog->printDebug(3);
 
 
     if(size > threshold){
-      // std::cerr << "    ^--- Decided on Crack\n";
-      std::cout <<"Decided to crack" << std::endl;
-      return TRANSFORM_WITH(size, randomSplitArray<Tuple>);
+      // std::cerr << "    ^--- Decided on Divide\n";
+      std::cout << "In Divide policy" << std::endl;
+      return TRANSFORM_WITH(size, divideArray<Tuple>);
     } else {
       // std::cerr << "    ^--- Decided on Sort\n";
-      std::cout <<"Decided to sort"<< std::endl;
+      std::cout<<"Decided on Sort as size < threshold"<<std::endl;
       return TRANSFORM_WITH(size, sortArray<Tuple>);
     }
 

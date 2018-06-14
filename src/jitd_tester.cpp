@@ -91,7 +91,7 @@ int jitd_test(
 ) {
   string line;
   vector<std::thread> threads;
-  
+  string policy_name;
   timeval global_start, global_end;
   gettimeofday(&global_start, NULL);
   
@@ -130,14 +130,53 @@ int jitd_test(
     } CASE("policy_set") {
       
       CASE_1("cracksort"){
+        policy_name = "cracksort";
         int threshold;
         toks >> threshold;
         cout << "Switching to Crack/Sort Policy with Threshold of " << threshold << endl;
+        //cout << &jitd.getPolicy();
         jitd.getPolicy()->setScoreFunction(
           std::bind(CrackOrSortArraysBigFirst<Record>, threshold, std::placeholders::_1)
         );
         jitd.reinitPolicy();
-      } else {
+      } 
+      CASE("crack")
+      {
+        policy_name = "crack";
+        int threshold;
+        toks >> threshold;
+        cout << "Switching to Crack-Only Policy with Threshold of " << threshold << endl;
+        jitd.getPolicy()->setScoreFunction(
+          std::bind(CrackArrayBigFirst<Record>, threshold, std::placeholders::_1)
+        );
+        jitd.reinitPolicy();
+
+      }
+      CASE("sort")
+      {
+        policy_name = "sort";
+        int threshold;
+        toks >> threshold;
+        cout << "Switching to Sort-Only Policy with Threshold of " << threshold << endl;
+        jitd.getPolicy()->setScoreFunction(
+          std::bind(SortArrayBigFirst<Record>, threshold, std::placeholders::_1)
+        );
+        jitd.reinitPolicy();
+
+      }
+      CASE("merge")
+      {
+        policy_name = "merge";
+        int threshold;
+        toks >> threshold;
+        cout << "Switching to Merge-Only Policy with Threshold of " << threshold << endl;
+        jitd.getPolicy()->setScoreFunction(
+          std::bind(MergeArraySmallFirst<Record>, threshold, std::placeholders::_1)
+        );
+        jitd.reinitPolicy();
+
+      }
+      else {
         cerr << "Invalid Policy " << op << endl;
         exit(-1);
       }
@@ -147,7 +186,7 @@ int jitd_test(
       jitd.getPolicy()->describeNext();
       JITD_TEST_POLICY *policy = jitd.getPolicy();
       gettimeofday(&start, NULL);
-      policy->act();
+      policy->act(policy_name);
       gettimeofday(&end, NULL);
       cout << "Policy Action: " << total_time(start, end) << " us" << endl;
 
@@ -161,7 +200,7 @@ int jitd_test(
 
       for(int x = 0; x < target_steps; x++){
         gettimeofday(&start, NULL);
-        policy->act();
+        policy->act(policy_name);
         gettimeofday(&end, NULL);
         used_microseconds += total_time(start, end);
       }
@@ -177,7 +216,7 @@ int jitd_test(
       gettimeofday(&start, NULL);
       while(more_work_to_do){
         steps_taken++;
-        more_work_to_do = policy->act();
+        more_work_to_do = policy->act(policy_name);
       }
       gettimeofday(&end, NULL);
       cout << "policy_act_until_done " << steps_taken << " Actions: " << total_time(start, end) << " us" << endl;

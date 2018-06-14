@@ -76,14 +76,20 @@ void sm_test(istream &input)
             timeval start_s_scan, end_s_scan;
             Record target;
             target.value = NULL;
-            target.key = rand() % max;
+            
             bool keyFound = false;
             BufferElement<Record> result;
+            int scan_cnt = 1000000;
             //cout <<"Key searched for " << target.key<<endl; 
-            gettimeofday(&start_s_scan, NULL);   
-            keyFound = data_array_sorted->getKey(target,result);
+
+            gettimeofday(&start_s_scan, NULL);  
+            for(int i=0;i<scan_cnt;i++)
+            { 
+                target.key = rand() % max;
+                keyFound = data_array_sorted->getKey(target,result);
+            }    
             gettimeofday(&end_s_scan, NULL);
-            cout << "Time for 1 scan in a sorted array : " << total_time(start_s_scan, end_s_scan) << " us" << endl;
+            cout << "This is the scan time for doing 1000000 scans : "<<total_time(start_s_scan, end_s_scan)<<",";
             
         }
         CASE("MEASURE_UNSORTED_SCAN_TIME")

@@ -4,9 +4,14 @@
 #include <istream>
 #include "jitd.hpp"
 
+// #ifndef JITD_TEST_POLICY
+// #define JITD_TEST_POLICY PureLocalPolicy<Record>
+// #endif
+
 #ifndef JITD_TEST_POLICY
-#define JITD_TEST_POLICY PureLocalPolicy<Record>
+#define JITD_TEST_POLICY UniversalPolicy<Record>
 #endif
+
 #define TEST_JITD 
 
 typedef Buffer<Record> RecordBuffer;

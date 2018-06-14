@@ -1,0 +1,3 @@
+policy_set divide 10
+init random 10 10
+dump

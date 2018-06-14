@@ -39,6 +39,13 @@ class ArrayCog : public Cog<Tuple>
     {
       return Iterator<Tuple>(new BufferIterator<Tuple>(sortedBuffer()));
     }
+    int lsize(){ return 0; }
+   
+    int rsize(){ return 0; }
+   
+    CogHandle<Tuple> return_lhs(){return NULL;}
+    CogHandle<Tuple> return_rhs(){return NULL;}
+
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
 
     void printDebug(int depth)

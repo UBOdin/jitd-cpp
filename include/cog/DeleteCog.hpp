@@ -23,7 +23,18 @@ class DeleteCog : public Cog<Tuple>
       // STRONG ASSUMPTION: We never delete a record that doesn't exist
       return source->size() - deleted->size();
     }
-
+    int lsize()
+    {
+      // STRONG ASSUMPTION: We never delete a record that doesn't exist
+      return 0;
+    }
+    int rsize()
+    {
+      // STRONG ASSUMPTION: We never delete a record that doesn't exist
+      return 0;
+    }
+    // CogHandle<Tuple> return_lhs(){return NULL;}
+    // CogHandle<Tuple> return_rhs(){return NULL;}
     void printDebug(int depth)
     {
       Cog<Tuple>::printPrefix(depth);
@@ -33,7 +44,7 @@ class DeleteCog : public Cog<Tuple>
     }
      bool getKey(Tuple key)
     {
-      std::cout<<"In Delete getKey()"<<std::endl;
+      std::cout<<"In Delete getKey() not implemented"<<std::endl;
       return false;
       //Not Implemented...
     }

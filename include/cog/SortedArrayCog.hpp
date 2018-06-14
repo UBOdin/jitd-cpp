@@ -28,6 +28,8 @@ class SortedArrayCog : public Cog<Tuple>
     }
 
     int size(){ return end-start; }
+    int lsize(){ return 0; }
+    int rsize(){ return 0; }
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
 
     Iterator<Tuple> iterator()
