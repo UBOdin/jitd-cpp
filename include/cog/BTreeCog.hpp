@@ -18,8 +18,31 @@ class BTreeCog : public Cog<Tuple>
     int size(){ return lhs->size() + rhs->size(); }
     int lsize(){return lhs->size();}
     int rsize(){return rhs->size();}
-    CogHandle<Tuple> return_lhs(){return lhs;}
-    CogHandle<Tuple> return_rhs(){return rhs;}
+    bool lhs_leaf()
+    {
+      
+      if(lhs->type() == COG_SORTED_ARRAY)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    bool rhs_leaf()
+    {
+      
+      if(rhs->type() == COG_SORTED_ARRAY)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    Tuple getSepVal(){return sep;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) 
     {
       fn(lhs);

@@ -32,7 +32,11 @@ class JITD {
     {
       return std::atomic_load(root);
     }
-    
+    CogHandle<Tuple> getMergeRoot()
+    {
+      CogHandle<Tuple> r = std::atomic_load(&root);
+      return r;
+    }
     Iterator<Tuple> iterator()
     {
       // Root changes with each version, so we need to sync the pointer.
@@ -115,6 +119,7 @@ class JITD {
       keyFound = r->getKey(key,result);
 
     }
+
   private: 
     
     // Replace root with newRoot.  placeholder is set to the value of root

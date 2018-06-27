@@ -30,8 +30,10 @@ class SortedArrayCog : public Cog<Tuple>
     int size(){ return end-start; }
     int lsize(){ return 0; }
     int rsize(){ return 0; }
+    bool lhs_leaf(){return false;}
+    bool rhs_leaf(){return false;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
-
+    //Tuple getSepVal(){return 0;}
     Iterator<Tuple> iterator()
     {
       return Iterator<Tuple>(new BufferIterator<Tuple>(buffer, start, end));

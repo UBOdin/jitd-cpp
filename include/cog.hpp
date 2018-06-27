@@ -66,6 +66,16 @@ class Cog {
       std::cerr << type << std::endl;
       assert(0);
     }
+    virtual bool lhs_leaf()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
+    virtual bool rhs_leaf()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
     virtual int size()
     {
       std::cerr << type << std::endl;
@@ -99,6 +109,11 @@ class Cog {
       std::cout << "???" << std::endl;
     }
     virtual bool getKey(Record key, BufferElement<Tuple> &result)
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
+    virtual Tuple getSepVal()
     {
       std::cerr << type << std::endl;
       assert(0);
@@ -143,6 +158,9 @@ class CogHandleBase {
     inline void            printDebug(int depth) { get()->printDebug(depth); }
     inline bool            getKey(Record key, BufferElement<Tuple> &result) {return get()->getKey(key,result);} 
     inline Buffer<Tuple>   getBuffer() {return get()->getBuffer();}
+    inline bool            lhs_leaf() {return get()->lhs_leaf();} 
+    inline bool            rhs_leaf() {return get()->rhs_leaf();}
+    inline Tuple            getSepVal() {return get()->getSepVal();}
 };
 
 template <class Tuple>

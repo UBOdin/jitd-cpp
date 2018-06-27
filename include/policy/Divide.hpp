@@ -13,10 +13,10 @@ template<class Tuple>
 
     if(size > threshold){
       // std::cerr << "    ^--- Decided on Divide\n";
-      std::cout << "In Divide policy" << std::endl;
+      //std::cout << "In Divide policy" << std::endl;
       return TRANSFORM_WITH(size, divideArray<Tuple>);
     } else {
-      std::cout<<" size < threshold"<<std::endl;
+      //std::cout<<" size < threshold"<<std::endl;
       return NO_TRANSFORMS;
     }
 

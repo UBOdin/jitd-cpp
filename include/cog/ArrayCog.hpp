@@ -42,10 +42,10 @@ class ArrayCog : public Cog<Tuple>
     int lsize(){ return 0; }
    
     int rsize(){ return 0; }
-   
-    CogHandle<Tuple> return_lhs(){return NULL;}
-    CogHandle<Tuple> return_rhs(){return NULL;}
-
+    
+    bool lhs_leaf(){return false;}
+    bool rhs_leaf(){return false;}
+    //Tuple getSepVal(){return 0;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
 
     void printDebug(int depth)

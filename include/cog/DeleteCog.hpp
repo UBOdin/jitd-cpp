@@ -33,8 +33,9 @@ class DeleteCog : public Cog<Tuple>
       // STRONG ASSUMPTION: We never delete a record that doesn't exist
       return 0;
     }
-    // CogHandle<Tuple> return_lhs(){return NULL;}
-    // CogHandle<Tuple> return_rhs(){return NULL;}
+    bool lhs_leaf(){return false;}
+    bool rhs_leaf(){return false;}
+    //Tuple getSepVal(){return 0;}
     void printDebug(int depth)
     {
       Cog<Tuple>::printPrefix(depth);

@@ -38,103 +38,90 @@
 //     return ScoreFunctionReturn<Tuple>();
 //   }
 // template <class Tuple>
-// struct MergeAction {
 
-//     MergeAction(CogHandle<Tuple> target, Transform<Tuple> effect, Score score) : 
-//       target(target), effect(effect), score(score) {}
-//     CogHandle<Tuple> target;
-//     Transform<Tuple> effect;
-//     Score score;
-
-//     inline const bool operator>(const MergeAction<Tuple> &other){ return score > other.score; }
-    
-//   };
-
-// template<class Tuple>
-// inline bool operator>(const MergeAction<Tuple> &a, const MergeAction<Tuple> &b){ return a.score > b.score; }
 
 
 template <class Tuple> class UniversalPolicy {
   
   std::priority_queue<Action<Tuple>> todos;
-  //std::priority_queue<MergeAction<Tuple>> mergePQ;
-
+  CogPtr<Tuple> cogToMerge;
+  long long int min_score;
   ScoreFunction<Tuple> score;
 
   public:
 
-    UniversalPolicy() : todos(), score(NoOpScoreFunction<Tuple>)
+    UniversalPolicy() : todos(), score(NoOpScoreFunction<Tuple>), min_score(LLONG_MAX), cogToMerge()
     {}
 
     void init(CogHandle<Tuple> root){
       while(!todos.empty()){ todos.pop(); }
-      //while(!mergePQ.empty()){ mergePQ.pop(); }
       enqueueCog(root);
-      //enqueueCogMerge(root);
+      
     }
 
     void setScoreFunction(ScoreFunction<Tuple> newFn) { score = newFn; }
 
-    inline bool act(std::string policy_name){
-      //std::cout<<"Universal Policy"<<std::endl;
-      if(policy_name == "crack" || policy_name == "sort" || policy_name == "divide" || policy_name == "merge")
-      {
-        if(todos.empty()){ std::cout<<"Todos empty"<<std::endl;return false; }
+    inline bool act(){
+      
+        if(todos.empty()){ return false; }
         Action<Tuple> next = todos.top(); 
-        //CogType val = (next.target->type());
-        //std::cout<<"the PQ elem Target: " << val << "; Score: " << next.score <<std::endl;
         todos.pop();
         CogPtr<Tuple> target = next.target->get();
+        
         CogPtr<Tuple> replacement = target;
         if(next.effect(replacement)){
-          target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
+          //target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
           next.target->put(replacement);
           enqueueCog(next.target);
 
         }
         return true;
+      
+    }
+    inline bool merge_act(CogHandle<Tuple> root)
+    {
+      
+      CogPtr<Tuple> target = root->get();
+      
+      if(target->type == COG_BTREE)
+      {
+        target->apply_to_children(std::bind(&UniversalPolicy::scoreCog, this, std::placeholders::_1));
+        
+        mergeArray(cogToMerge);
+        return false;
+        
       }
-      // if(policy_name == "sort")
-      // {
-      //   if(todos.empty()){ std::cout<<"Todos sort empty"<<std::endl;return false; }
-      //   Action<Tuple> next = todos.top(); 
-      //   //CogType val = (next.target->type());
-      //   //std::cout<<"the PQ elem Target: " << val << "; Score: " << next.score <<std::endl;
-      //   todos.pop();
-      //   CogPtr<Tuple> target = next.target->get();
-      //   CogPtr<Tuple> replacement = target;
-      //   if(next.effect(replacement)){
-      //     target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
-      //     next.target->put(replacement);
-      //     enqueueCog(next.target);
-
-      //   }
-      //   return true;
-      // }
-      // if(policy_name == "merge")
-      // {
-      //   //std::cout << "merging...." << std::endl;
-      //   if(todos.empty()){ std::cout<<"Todos merge empty"<<std::endl;return false; }
-      //   Action<Tuple> next = todos.top(); 
-      //   todos.pop();
-      //   CogPtr<Tuple> target = next.target->get();
-      //   CogPtr<Tuple> replacement = target;
-      //   if(next.effect(replacement)){
-      //     target->apply_to_children(std::bind(&UniversalPolicy::dequeueCog, this, std::placeholders::_1));
-      //     next.target->put(replacement);
-      //     enqueueCog(next.target);
-
-      //   }
-      //   return true;
-      // }
-
       else
       {
-        std::cout <<"No valid atomic policy"<<std::endl;
         return false;
       }
     }
+    inline void scoreCog (CogHandle<Tuple> Target)
+    {
+      CogPtr<Tuple> cog = Target->get(); 
+      long long int score = 0;
+      
+      if(cog->lhs_leaf() && cog->rhs_leaf())
+      {
 
+        int lhs_size = cog->lsize();
+        int rhs_size = cog->rsize();
+        score = std::abs(lhs_size - rhs_size);
+       
+        if(score < min_score)
+        {
+            min_score = score;
+            cogToMerge = Target->get();
+            
+        }
+      }
+      else
+      {
+        cog->apply_to_children(std::bind(&UniversalPolicy::scoreCog, this, std::placeholders::_1));
+
+      }
+      
+    }
     inline void dequeueCog(CogHandle<Tuple> target)
     {
       std::cerr << "dequeue cog unimplemented\n";
@@ -146,7 +133,6 @@ template <class Tuple> class UniversalPolicy {
       // std::cerr << "Enqueue " << target << std::endl;
       CogPtr<Tuple> cog = target->get();
       std::experimental::optional<std::pair<Score,Transform<Tuple>>> op = score(cog);
-      //std::cout << "In enqueue cog emplace The target is  " << target <<"The transform is "<< op->second.get() <<"The score is " << op->first << std::endl;
       if(op){
         todos.emplace(
           target,
