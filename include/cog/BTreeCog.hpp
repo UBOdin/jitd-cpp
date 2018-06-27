@@ -45,6 +45,7 @@ class BTreeCog : public Cog<Tuple>
     Tuple getSepVal(){return sep;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) 
     {
+      //std::cout<<"in apply to children"<<std::endl;
       fn(lhs);
       fn(rhs);
     }

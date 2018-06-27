@@ -46,11 +46,12 @@ template <class Tuple> class UniversalPolicy {
   std::priority_queue<Action<Tuple>> todos;
   CogPtr<Tuple> cogToMerge;
   long long int min_score;
+  CogHandle<Tuple> oldCogHandle;
   ScoreFunction<Tuple> score;
 
   public:
 
-    UniversalPolicy() : todos(), score(NoOpScoreFunction<Tuple>), min_score(LLONG_MAX), cogToMerge()
+    UniversalPolicy() : todos(), score(NoOpScoreFunction<Tuple>), min_score(LLONG_MAX), cogToMerge(), oldCogHandle()
     {}
 
     void init(CogHandle<Tuple> root){
@@ -80,21 +81,20 @@ template <class Tuple> class UniversalPolicy {
     }
     inline bool merge_act(CogHandle<Tuple> root)
     {
-      
+      min_score = LLONG_MAX;
       CogPtr<Tuple> target = root->get();
-      
-      if(target->type == COG_BTREE)
-      {
+      //std::cout<<"in merge act root sep "<< target->getSepVal()<<","<<target->type<<std::endl;
+      if(target->type == COG_SORTED_ARRAY){return false;}
+      if(target->lhs_leaf() && target->rhs_leaf()){mergeArray(target);root->put(target);return true;}
+        //std::cout<<"in if "<<std::endl;
         target->apply_to_children(std::bind(&UniversalPolicy::scoreCog, this, std::placeholders::_1));
         
         mergeArray(cogToMerge);
-        return false;
         
-      }
-      else
-      {
-        return false;
-      }
+        oldCogHandle->put(cogToMerge);
+
+
+        return true;
     }
     inline void scoreCog (CogHandle<Tuple> Target)
     {
@@ -110,8 +110,10 @@ template <class Tuple> class UniversalPolicy {
        
         if(score < min_score)
         {
+          //std::cout<<"CTM Sep " << cog->getSepVal()<<std::endl;
             min_score = score;
-            cogToMerge = Target->get();
+            cogToMerge = cog;
+            oldCogHandle = Target;
             
         }
       }

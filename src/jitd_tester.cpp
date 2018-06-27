@@ -201,7 +201,7 @@ int jitd_test(
         unsigned long steps_taken = 0;
         timeval start, end;
         JITD_TEST_POLICY *policy = jitd.getPolicy();
-
+        int target_steps = 12;
         gettimeofday(&start, NULL);
         while(more_work_to_do)
         {
