@@ -1,0 +1,12 @@
+policy_set divide 1000000
+init random 1000000000 1000000000
+dump
+policy_act_until_done
+policy_set crack 100000
+policy_act_until_done
+policy_set sort 100000
+policy_act_until_done
+policy_set merge 100000
+policy_act_for 600
+dump
+random_scan 1000 1000000000

@@ -32,8 +32,24 @@ class SortedArrayCog : public Cog<Tuple>
     int rsize(){ return 0; }
     bool lhs_leaf(){return false;}
     bool rhs_leaf(){return false;}
+    std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr() 
+    {
+      //std::cout<<"no lhs pointer";
+      std::cerr << "no lhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
+      //return nullptr;
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
+    {
+      //std::cout<<"no rhs pointer";
+      std::cerr << "no rhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
+      //return nullptr;
+    }
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
-    //Tuple getSepVal(){return 0;}
+    Tuple getSepVal(){std::cerr <<"Sorted Array Cog no sep";assert(0);return 0;}
     Iterator<Tuple> iterator()
     {
       return Iterator<Tuple>(new BufferIterator<Tuple>(buffer, start, end));

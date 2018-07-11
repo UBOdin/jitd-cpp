@@ -43,6 +43,7 @@ template <class Tuple>
 template <class Tuple>
   using RewritePolicy = std::shared_ptr<RewritePolicyBase<Tuple> >;
 
+
 ///////////// Global Cog Content /////////////
 
 typedef enum {
@@ -72,6 +73,16 @@ class Cog {
       assert(0);
     }
     virtual bool rhs_leaf()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
+    virtual std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
+    virtual std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr()
     {
       std::cerr << type << std::endl;
       assert(0);
@@ -122,7 +133,7 @@ class Cog {
 };
 
 template <class Tuple>
-  using CogPtr = std::shared_ptr< Cog<Tuple> >;
+  using CogPtr = std::shared_ptr< Cog<Tuple> >;  
 
 #define makeHandle(s) CogHandle<Tuple>(new CogHandleBase<Tuple>(CogPtr<Tuple>(s)))
 
@@ -160,11 +171,14 @@ class CogHandleBase {
     inline Buffer<Tuple>   getBuffer() {return get()->getBuffer();}
     inline bool            lhs_leaf() {return get()->lhs_leaf();} 
     inline bool            rhs_leaf() {return get()->rhs_leaf();}
-    inline Tuple            getSepVal() {return get()->getSepVal();}
+    inline Tuple           getSepVal() {return get()->getSepVal();}
+    inline std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr() {return get()->lhs_ptr();}
+    inline std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() {return get()->rhs_ptr();}
 };
 
 template <class Tuple>
   using CogHandle = std::shared_ptr<CogHandleBase<Tuple> >;
+
 
 
 #include "iterator.hpp"

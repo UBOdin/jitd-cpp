@@ -13,9 +13,10 @@ class ConcatCog : public Cog<Tuple>
     int lsize(){return lhs->size();}
     int rsize(){return rhs->size();}
 
-    bool lhs_leaf()
+     bool lhs_leaf()
     {
-      if(lhs->type() == COG_SORTED_ARRAY)
+      
+      if(lhs->type() == COG_SORTED_ARRAY || lhs->type() == COG_ARRAY )
       {
         return true;
       }
@@ -23,10 +24,11 @@ class ConcatCog : public Cog<Tuple>
       {
         return false;
       }
+      //return lhs;
     }
     bool rhs_leaf()
     {
-      if(rhs->type() == COG_SORTED_ARRAY)
+      if(rhs->type() == COG_SORTED_ARRAY || rhs->type() == COG_ARRAY )
       {
         return true;
       }
@@ -34,13 +36,22 @@ class ConcatCog : public Cog<Tuple>
       {
         return false;
       }
+      //return rhs;
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr() 
+    {
+      return lhs;
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
+    {
+      return rhs;
     }
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) 
     {
       fn(lhs);
       fn(rhs);
     }
-    //Tuple getSepVal(){return 0;}
+    Tuple getSepVal(){std::cout <<"Concat Cog no sep";return 0;}
     void printDebug(int depth)
     {
       Cog<Tuple>::printPrefix(depth);

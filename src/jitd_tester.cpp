@@ -212,6 +212,21 @@ int jitd_test(
         gettimeofday(&end, NULL);
         cout << "policy_act_until_done " << steps_taken << " Actions: " << total_time(start, end) << " us" << endl;
     }
+    CASE("merge_act_for") {
+      long target_steps;
+      double used_microseconds = 0;
+      timeval start, end;
+      JITD_TEST_POLICY *policy = jitd.getPolicy();
+
+      toks >> target_steps;
+      //cout << "in merge act for target steps "<< target_steps <<endl;
+      for(int x = 0; x < target_steps; x++){
+        gettimeofday(&start, NULL);
+        policy->merge_act(jitd.getMergeRoot());
+        gettimeofday(&end, NULL);
+        used_microseconds += total_time(start, end);
+      }
+    }
     CASE("policy_act_once") {
       timeval start, end;
       jitd.getPolicy()->describeNext();

@@ -45,7 +45,19 @@ class ArrayCog : public Cog<Tuple>
     
     bool lhs_leaf(){return false;}
     bool rhs_leaf(){return false;}
-    //Tuple getSepVal(){return 0;}
+    std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr() 
+    {
+      std::cerr << "no lhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
+    {
+      std::cerr << "no lhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
+    }
+    Tuple getSepVal(){std::cerr <<"Array Cog no sep";assert(0);return 0;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
 
     void printDebug(int depth)

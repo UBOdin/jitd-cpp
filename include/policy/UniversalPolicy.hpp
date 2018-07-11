@@ -1,4 +1,4 @@
-
+#include <climits>
 // typedef int Score;
 
 // template<class Tuple>
@@ -83,27 +83,46 @@ template <class Tuple> class UniversalPolicy {
     {
       min_score = LLONG_MAX;
       CogPtr<Tuple> target = root->get();
+      //std::cout<<"in merge act"<<std::endl;
       //std::cout<<"in merge act root sep "<< target->getSepVal()<<","<<target->type<<std::endl;
-      if(target->type == COG_SORTED_ARRAY){return false;}
-      if(target->lhs_leaf() && target->rhs_leaf()){mergeArray(target);root->put(target);return true;}
-        //std::cout<<"in if "<<std::endl;
-        target->apply_to_children(std::bind(&UniversalPolicy::scoreCog, this, std::placeholders::_1));
+      //std::cout<<"new impl"<<std::endl;
+      if(target->type == COG_SORTED_ARRAY || target->type == COG_ARRAY){return false;}
+      CogHandle<Tuple> lhsHandle = target->lhs_ptr();
+      CogHandle<Tuple> rhsHandle = target->rhs_ptr();
+      //std::cout<<"Cog Handle" << lhsHandle->type() << rhsHandle->type() <<std::endl;
+      //if(target->lhs_leaf() && target->rhs_leaf()){mergeArray(target);root->put(target);return true;}
+      if(lhsHandle->type() == COG_SORTED_ARRAY && rhsHandle->type() == COG_SORTED_ARRAY)
+      {
+        //std::cout<<"ROOT merge"<<std::endl;
+        mergeArray(target);root->put(target);return true;
+      }
+      target->apply_to_children(std::bind(&UniversalPolicy::scoreCog, this, std::placeholders::_1));
         
-        mergeArray(cogToMerge);
+      mergeArray(cogToMerge);
         
-        oldCogHandle->put(cogToMerge);
+      oldCogHandle->put(cogToMerge);
 
 
-        return true;
+      return true;
     }
     inline void scoreCog (CogHandle<Tuple> Target)
     {
       CogPtr<Tuple> cog = Target->get(); 
-      long long int score = 0;
-      
-      if(cog->lhs_leaf() && cog->rhs_leaf())
+      if(cog->type == COG_BTREE || cog->type == COG_CONCAT)
       {
+      //std::cout<<"The sep value is "<<cog->getSepVal()<<std::endl;
+      long long int score = 0;
+      CogHandle<Tuple> lhsCog = cog->lhs_ptr();
 
+      //std::cout<<"Cog Handle lhs" << lhsCog->type()  <<std::endl;
+      CogHandle<Tuple> rhsCog = cog->rhs_ptr();
+      //std::cout<<"Cog Handle rhs" << rhsCog->type() <<std::endl;
+      //std::cout<<"HERE"<<std::endl;
+      
+      //if(cog->lhs_leaf() && cog->rhs_leaf())
+      if(lhsCog->type()==COG_SORTED_ARRAY && rhsCog->type()==COG_SORTED_ARRAY)
+      {
+        //std::cout<<"in if"<<std::endl;
         int lhs_size = cog->lsize();
         int rhs_size = cog->rsize();
         score = std::abs(lhs_size - rhs_size);
@@ -122,6 +141,7 @@ template <class Tuple> class UniversalPolicy {
         cog->apply_to_children(std::bind(&UniversalPolicy::scoreCog, this, std::placeholders::_1));
 
       }
+    }
       
     }
     inline void dequeueCog(CogHandle<Tuple> target)

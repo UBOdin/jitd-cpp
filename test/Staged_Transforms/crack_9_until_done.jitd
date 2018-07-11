@@ -1,0 +1,8 @@
+policy_set crack 1000000000
+init random 1000000000 1000000000
+dump
+policy_act_until_done
+policy_set sort 1000000000
+policy_act_until_done
+policy_set merge 1000000000
+merge_act_until_done

@@ -21,7 +21,7 @@ class BTreeCog : public Cog<Tuple>
     bool lhs_leaf()
     {
       
-      if(lhs->type() == COG_SORTED_ARRAY)
+      if(lhs->type() == COG_SORTED_ARRAY || lhs->type() == COG_ARRAY )
       {
         return true;
       }
@@ -29,11 +29,11 @@ class BTreeCog : public Cog<Tuple>
       {
         return false;
       }
+      //return lhs;
     }
     bool rhs_leaf()
     {
-      
-      if(rhs->type() == COG_SORTED_ARRAY)
+      if(rhs->type() == COG_SORTED_ARRAY || rhs->type() == COG_ARRAY )
       {
         return true;
       }
@@ -41,6 +41,15 @@ class BTreeCog : public Cog<Tuple>
       {
         return false;
       }
+      //return rhs;
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr() 
+    {
+      return lhs;
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
+    {
+      return rhs;
     }
     Tuple getSepVal(){return sep;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) 

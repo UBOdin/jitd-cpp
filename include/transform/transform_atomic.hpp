@@ -91,11 +91,51 @@ template <class Tuple>
   bool mergeArray(CogPtr<Tuple> &cog)
     {
       //std::cout<<"cog to merge "<< cog;
-      if(cog->type == COG_BTREE ){
+      if(cog->type == COG_BTREE){
         //std::cout <<"Btree Cog Found here ready to merge" <<std::endl;
         BTreeCog<Tuple> *btree = (BTreeCog<Tuple> *)cog.get();
         CogPtr<Tuple> lhs_ptr = btree->lhs->get();
         CogPtr<Tuple> rhs_ptr = btree->rhs->get();
+        // Tuple sep = btree->sep;
+        // //std::cout<<"Btree["<<sep<<"]"<<std::endl;
+        // // std::cout<< "lhs ptr is "<<lhs_ptr->type << std::endl;
+        if(lhs_ptr->type == COG_SORTED_ARRAY && rhs_ptr->type == COG_SORTED_ARRAY  )
+        {
+          Buffer<Tuple> lhs_buff = lhs_ptr->getBuffer();
+          Buffer<Tuple> rhs_buff = rhs_ptr->getBuffer();
+          //std::cout << "Here... "<<std::endl;
+          BufferElement<Tuple> lhs_start = lhs_buff->begin();
+          BufferElement<Tuple> lhs_end = lhs_buff->end();
+          BufferElement<Tuple> rhs_start = rhs_buff->begin();
+          BufferElement<Tuple> rhs_end = rhs_buff->end();
+          Buffer<Tuple> merged_array (new std::vector<Tuple>);
+          for(;lhs_start<lhs_end;++lhs_start)
+          {
+            merged_array->push_back(*lhs_start);
+          }
+          for(;rhs_start<rhs_end;++rhs_start)
+          {
+            merged_array->push_back(*rhs_start);
+          }
+          BufferElement<Tuple> curr = merged_array->begin();
+          // for(;curr<merged_array->end();++curr)
+          // {
+          //   std::cout<< *curr <<",";
+          // }
+          // std::cout << "Merge complete" <<std::endl;
+          cog = CogPtr<Tuple>(new SortedArrayCog<Tuple>(merged_array,merged_array->begin(),merged_array->end()));
+           return true;
+         }
+        else
+        {
+          return false;
+        }
+      }
+      if(cog->type == COG_CONCAT){
+        //std::cout <<"Btree Cog Found here ready to merge" <<std::endl;
+        ConcatCog<Tuple> *concat = (ConcatCog<Tuple> *)cog.get();
+        CogPtr<Tuple> lhs_ptr = concat->lhs->get();
+        CogPtr<Tuple> rhs_ptr = concat->rhs->get();
         // Tuple sep = btree->sep;
         // //std::cout<<"Btree["<<sep<<"]"<<std::endl;
         // // std::cout<< "lhs ptr is "<<lhs_ptr->type << std::endl;

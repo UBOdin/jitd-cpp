@@ -35,7 +35,19 @@ class DeleteCog : public Cog<Tuple>
     }
     bool lhs_leaf(){return false;}
     bool rhs_leaf(){return false;}
-    //Tuple getSepVal(){return 0;}
+    std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr() 
+    {
+      std::cerr << "no lhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
+    {
+      std::cerr << "no lhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
+    }
+    Tuple getSepVal(){std::cerr << "no Sep Val for delete" << std::endl; assert(0);exit(-1);}
     void printDebug(int depth)
     {
       Cog<Tuple>::printPrefix(depth);
