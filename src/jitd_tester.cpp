@@ -226,6 +226,7 @@ int jitd_test(
         gettimeofday(&end, NULL);
         used_microseconds += total_time(start, end);
       }
+      cout << "Policy_act_for_ " << target_steps << " Actions: " << used_microseconds << " us" << endl;
     }
     CASE("policy_act_once") {
       timeval start, end;
@@ -370,10 +371,11 @@ int jitd_test(
     // } 
     CASE("random_scan")
     {
-      //cout << "point scan detected"<<endl;
+      cout << "Switching to random point scan"<<endl;
       long int key;
       int scan_cnt, max_scan_val;
       toks >> scan_cnt >> max_scan_val;
+      //cout<<"scancnt is"<< scan_cnt;
       Record target;
       target.value = NULL;
       timeval start_scan, end_scan;

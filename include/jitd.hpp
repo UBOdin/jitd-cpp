@@ -111,7 +111,7 @@ class JITD {
 
     void get(Record key)
     {
-      //std::cout<<"the getter method" << std::endl;
+      //std::cout<<"the get method" << std::endl;
       CogHandle<Tuple> r = std::atomic_load(&root);
       //std::cout << "the type of root is " << r->type()<<std::endl;
       bool keyFound = false;

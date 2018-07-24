@@ -59,10 +59,19 @@ class ConcatCog : public Cog<Tuple>
       lhs->printDebug(depth+1);
       rhs->printDebug(depth+1);
     }
-     bool getKey(Tuple key)
+     bool getKey(Tuple key, BufferElement<Tuple> &result)
     {
-      std::cout<<"In Concat getKey() not implemented"<<std::endl;
-      return false;
+      //std::cout<<"In Concat getKey()"<<std::endl;
+      bool inLhs = lhs->getKey(key,result);
+      if(inLhs == true)
+      {
+        return true;
+      }
+      else
+      {
+        return rhs->getKey(key,result);
+      }
+      
       //Not Implemented...
     }
     CogHandle<Tuple> lhs;
