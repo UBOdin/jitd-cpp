@@ -1,0 +1,5 @@
+Skipping irrelevant operation: policy_set cracksort 1000000
+Load Map: 3.93551e+09 us
+Scan Map time in Heavy Hitter Mode: 416301 us
+Skipping irrelevant operation: dump
+Skipping irrelevant operation: policy_act_until_done

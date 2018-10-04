@@ -1,0 +1,102 @@
+==10657== Memcheck, a memory error detector
+==10657== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==10657== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==10657== Command: ./driver -j test/Staged_Transforms/dividecracksort_5_debug_7.jitd
+==10657== Parent PID: 9500
+==10657== 
+==10657== Invalid read of size 8
+==10657==    at 0x40BC67: SortedArrayCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (SortedArrayCog.hpp:80)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40F7B4: BTreeCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (BTreeCog.hpp:81)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40F7B4: BTreeCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (BTreeCog.hpp:81)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==  Address 0xc0d5510 is 0 bytes after a block of size 50,384 alloc'd
+==10657==    at 0x4C2E0EF: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==10657==    by 0x407156: __gnu_cxx::new_allocator<Record>::allocate(unsigned long, void const*) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x4070FB: std::allocator_traits<std::allocator<Record> >::allocate(std::allocator<Record>&, unsigned long) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x4070A2: std::_Vector_base<Record, std::allocator<Record> >::_M_allocate(unsigned long) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x408FCC: void std::vector<Record, std::allocator<Record> >::_M_range_initialize<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > > >(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::forward_iterator_tag) (stl_vector.h:1287)
+==10657==    by 0x408F74: void std::vector<Record, std::allocator<Record> >::_M_initialize_dispatch<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > > >(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::__false_type) (stl_vector.h:1263)
+==10657==    by 0x408EDA: std::vector<Record, std::allocator<Record> >::vector<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, void>(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::allocator<Record> const&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x408C8F: ArrayCog<Record>::sortedBuffer() (ArrayCog.hpp:21)
+==10657==    by 0x41C94A: bool sortArray<Record>(std::shared_ptr<Cog<Record> >&) (transform_atomic.hpp:80)
+==10657==    by 0x41D111: std::_Function_handler<bool (std::shared_ptr<Cog<Record> >&), bool (*)(std::shared_ptr<Cog<Record> >&)>::_M_invoke(std::_Any_data const&, std::shared_ptr<Cog<Record> >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x41F2C7: std::function<bool (std::shared_ptr<Cog<Record> >&)>::operator()(std::shared_ptr<Cog<Record> >&) const (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x41663E: UniversalPolicy<Record>::act() (UniversalPolicy.hpp:73)
+==10657== 
+==10657== Invalid read of size 8
+==10657==    at 0x40BC67: SortedArrayCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (SortedArrayCog.hpp:80)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E217: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:72)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==  Address 0xbe94070 is 0 bytes after a block of size 120,560 alloc'd
+==10657==    at 0x4C2E0EF: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==10657==    by 0x407156: __gnu_cxx::new_allocator<Record>::allocate(unsigned long, void const*) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x4070FB: std::allocator_traits<std::allocator<Record> >::allocate(std::allocator<Record>&, unsigned long) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x4070A2: std::_Vector_base<Record, std::allocator<Record> >::_M_allocate(unsigned long) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x408FCC: void std::vector<Record, std::allocator<Record> >::_M_range_initialize<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > > >(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::forward_iterator_tag) (stl_vector.h:1287)
+==10657==    by 0x408F74: void std::vector<Record, std::allocator<Record> >::_M_initialize_dispatch<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > > >(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::__false_type) (stl_vector.h:1263)
+==10657==    by 0x408EDA: std::vector<Record, std::allocator<Record> >::vector<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, void>(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::allocator<Record> const&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x408C8F: ArrayCog<Record>::sortedBuffer() (ArrayCog.hpp:21)
+==10657==    by 0x41C94A: bool sortArray<Record>(std::shared_ptr<Cog<Record> >&) (transform_atomic.hpp:80)
+==10657==    by 0x41D111: std::_Function_handler<bool (std::shared_ptr<Cog<Record> >&), bool (*)(std::shared_ptr<Cog<Record> >&)>::_M_invoke(std::_Any_data const&, std::shared_ptr<Cog<Record> >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x41F2C7: std::function<bool (std::shared_ptr<Cog<Record> >&)>::operator()(std::shared_ptr<Cog<Record> >&) const (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x41663E: UniversalPolicy<Record>::act() (UniversalPolicy.hpp:73)
+==10657== 
+==10657== Invalid read of size 8
+==10657==    at 0x40BC67: SortedArrayCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (SortedArrayCog.hpp:80)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E217: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:72)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E1C2: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:65)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E217: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:72)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x40E217: ConcatCog<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (ConcatCog.hpp:72)
+==10657==    by 0x40EF26: CogHandleBase<Record>::getKey(Record, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==  Address 0xa1d85c0 is 0 bytes after a block of size 111,552 alloc'd
+==10657==    at 0x4C2E0EF: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==10657==    by 0x407156: __gnu_cxx::new_allocator<Record>::allocate(unsigned long, void const*) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x4070FB: std::allocator_traits<std::allocator<Record> >::allocate(std::allocator<Record>&, unsigned long) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x4070A2: std::_Vector_base<Record, std::allocator<Record> >::_M_allocate(unsigned long) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x408FCC: void std::vector<Record, std::allocator<Record> >::_M_range_initialize<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > > >(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::forward_iterator_tag) (stl_vector.h:1287)
+==10657==    by 0x408F74: void std::vector<Record, std::allocator<Record> >::_M_initialize_dispatch<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > > >(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::__false_type) (stl_vector.h:1263)
+==10657==    by 0x408EDA: std::vector<Record, std::allocator<Record> >::vector<__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, void>(__gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, __gnu_cxx::__normal_iterator<Record const*, std::vector<Record, std::allocator<Record> > >, std::allocator<Record> const&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x408C8F: ArrayCog<Record>::sortedBuffer() (ArrayCog.hpp:21)
+==10657==    by 0x41C94A: bool sortArray<Record>(std::shared_ptr<Cog<Record> >&) (transform_atomic.hpp:80)
+==10657==    by 0x41D111: std::_Function_handler<bool (std::shared_ptr<Cog<Record> >&), bool (*)(std::shared_ptr<Cog<Record> >&)>::_M_invoke(std::_Any_data const&, std::shared_ptr<Cog<Record> >&) (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x41F2C7: std::function<bool (std::shared_ptr<Cog<Record> >&)>::operator()(std::shared_ptr<Cog<Record> >&) const (in /home/csgrad/dbalakri/JITD_ICDE_2018F/jitd-cpp/driver)
+==10657==    by 0x41663E: UniversalPolicy<Record>::act() (UniversalPolicy.hpp:73)
+==10657== 
+==10657== 
+==10657== HEAP SUMMARY:
+==10657==     in use at exit: 72,704 bytes in 1 blocks
+==10657==   total heap usage: 108,048 allocs, 108,047 frees, 7,155,259,465 bytes allocated
+==10657== 
+==10657== LEAK SUMMARY:
+==10657==    definitely lost: 0 bytes in 0 blocks
+==10657==    indirectly lost: 0 bytes in 0 blocks
+==10657==      possibly lost: 0 bytes in 0 blocks
+==10657==    still reachable: 72,704 bytes in 1 blocks
+==10657==         suppressed: 0 bytes in 0 blocks
+==10657== Rerun with --leak-check=full to see details of leaked memory
+==10657== 
+==10657== For counts of detected and suppressed errors, rerun with: -v
+==10657== ERROR SUMMARY: 601 errors from 3 contexts (suppressed: 0 from 0)

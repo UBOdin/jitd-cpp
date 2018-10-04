@@ -1,0 +1,4 @@
+policy_set cracksort 3
+init random 10 10
+policy_act_for 2
+random_scan 5 10

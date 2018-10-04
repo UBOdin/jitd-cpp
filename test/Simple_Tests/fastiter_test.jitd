@@ -1,0 +1,9 @@
+init random 20 20
+policy_set divide 15
+policy_act_until_done
+policy_set crack 8
+policy_act_until_done
+dump
+policy_set sort 8
+policy_act_until_done
+range-scan 0 20 5

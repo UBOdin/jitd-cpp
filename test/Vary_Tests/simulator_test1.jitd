@@ -1,0 +1,2 @@
+init-sorted random 10 10
+MEASURE_SORTED_SCAN_TIME

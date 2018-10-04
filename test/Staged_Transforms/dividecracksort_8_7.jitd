@@ -1,0 +1,7 @@
+init random 1000000000 1000000000
+dump
+policy_set crack 100000000
+policy_act_until_done
+policy_set sort 100000000
+policy_act_for 7
+random_scan 1000 1000000000

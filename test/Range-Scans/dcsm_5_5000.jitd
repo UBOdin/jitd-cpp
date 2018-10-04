@@ -1,0 +1,9 @@
+init random 1000000000 1000000000
+dump
+policy_set crack 100000
+policy_act_until_done
+policy_set sort 100000
+policy_act_until_done
+policy_set merge 100000
+merge_act_for 5000
+range-scan 0 1000000000 100

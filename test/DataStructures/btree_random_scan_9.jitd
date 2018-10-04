@@ -1,0 +1,3 @@
+init_btree random 1000000000 1000000000
+random_scan_btree 1000 1000000000
+dump

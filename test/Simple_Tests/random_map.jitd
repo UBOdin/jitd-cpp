@@ -1,0 +1,3 @@
+init_orderedmap random 10 10
+random_scan_orderedmap 10 10
+dump

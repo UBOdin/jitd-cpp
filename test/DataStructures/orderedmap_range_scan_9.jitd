@@ -1,0 +1,3 @@
+init_orderedmap random 1000000000 1000000000
+range_scan_orderedmap 0 1000000000 100
+dump

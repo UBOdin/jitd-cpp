@@ -1,0 +1,8 @@
+Switching to Divide-Only Policy with Threshold of 100000000
+Init JITD: 39 us
+gROOT [1000000000 elements]
+  Array[1000000000 elements] : { 65668062, 142264300, 66566375, 64012770, 141034222, 65509725 ...  }
+Policy_act_for_ 5 Actions: 3.36914e+08 us
+Switching to random point scan
+Scan JITD time in Random Mode: 8.2764e+09 us
+Time[test/Staged_Transforms/divide_8_5.jitd]: 8653 s

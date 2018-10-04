@@ -1,0 +1,199 @@
+Switching to Divide-Only Policy with Threshold of 100
+Init JITD: 22 us
+gROOT [1000 elements]
+  Array[1000 elements] : { 62, 300, 375, 270, 222, 225 ...  }
+policy_act_until_done 21 Actions: 1594 us
+gROOT [1000 elements]
+  Concat
+    Concat
+      Array[65 elements] : { 10, 24, 13, 20, 26, 13 ...  }
+      Concat
+        Concat
+          Concat
+            Concat
+              Concat
+                Array[17 elements] : { 35, 37, 33, 36, 33, 36 ...  }
+                Array[87 elements] : { 62, 65, 55, 51, 79, 73 ...  }
+              Concat
+                Array[83 elements] : { 129, 125, 90, 91, 97, 95 ...  }
+                Array[32 elements] : { 134, 131, 133, 135, 142, 134 ...  }
+            Array[38 elements] : { 162, 155, 159, 167, 161, 166 ...  }
+          Concat
+            Array[74 elements] : { 190, 174, 183, 172, 175, 182 ...  }
+            Array[48 elements] : { 222, 225, 214, 231, 218, 217 ...  }
+        Array[75 elements] : { 236, 260, 261, 262, 262, 258 ...  }
+    Concat
+      Concat
+        Concat
+          Array[54 elements] : { 270, 283, 267, 288, 276, 275 ...  }
+          Concat
+            Array[43 elements] : { 300, 308, 305, 295, 292, 307 ...  }
+            Concat
+              Concat
+                Concat
+                  Concat
+                    Array[94 elements] : { 328, 329, 346, 332, 348, 352 ...  }
+                    Array[11 elements] : { 356, 359, 358, 356, 356, 359 ...  }
+                  Array[34 elements] : { 375, 370, 371, 372, 369, 360 ...  }
+                Array[8 elements] : { 384, 379, 383, 381, 380, 381 ...  }
+              Array[24 elements] : { 390, 394, 389, 389, 393, 385 ...  }
+        Array[47 elements] : { 398, 415, 399, 402, 396, 414 ...  }
+      Concat
+        Array[43 elements] : { 428, 417, 418, 417, 430, 431 ...  }
+        Concat
+          Concat
+            Array[91 elements] : { 457, 433, 479, 453, 455, 435 ...  }
+            Array[11 elements] : { 487, 490, 486, 487, 489, 490 ...  }
+          Array[21 elements] : { 491, 496, 495, 494, 493, 491 ...  }
+Switching to Crack-Only Policy with Threshold of 50
+policy_act_until_done 15 Actions: 504 us
+gROOT [1000 elements]
+  Concat
+    Concat
+      BTree[9]
+        Array[20 elements] : { 3, 6, 5, 6, 6, 8 ...  }
+        Array[45 elements] : { 10, 24, 13, 20, 26, 13 ...  }
+      Concat
+        Concat
+          Concat
+            Concat
+              Concat
+                Array[17 elements] : { 35, 37, 33, 36, 33, 36 ...  }
+                BTree[57]
+                  Array[40 elements] : { 55, 51, 42, 50, 45, 50 ...  }
+                  Array[47 elements] : { 62, 65, 79, 73, 78, 65 ...  }
+              Concat
+                BTree[126]
+                  BTree[109]
+                    Array[45 elements] : { 90, 91, 97, 95, 104, 80 ...  }
+                    Array[31 elements] : { 125, 115, 124, 115, 117, 110 ...  }
+                  Array[7 elements] : { 129, 130, 128, 126, 126, 126 ...  }
+                Array[32 elements] : { 134, 131, 133, 135, 142, 134 ...  }
+            Array[38 elements] : { 162, 155, 159, 167, 161, 166 ...  }
+          Concat
+            BTree[172]
+              Array[7 elements] : { 168, 168, 171, 170, 168, 169 ...  }
+              BTree[177]
+                Array[15 elements] : { 174, 172, 175, 176, 175, 173 ...  }
+                BTree[194]
+                  Array[30 elements] : { 190, 183, 182, 190, 181, 187 ...  }
+                  Array[22 elements] : { 196, 202, 202, 203, 204, 203 ...  }
+            Array[48 elements] : { 222, 225, 214, 231, 218, 217 ...  }
+        BTree[234]
+          Array[4 elements] : { 232, 233, 232, 233 }
+          BTree[265]
+            BTree[255]
+              Array[44 elements] : { 236, 237, 250, 243, 239, 245 ...  }
+              Array[25 elements] : { 260, 261, 262, 262, 258, 255 ...  }
+            Array[2 elements] : { 266, 265 }
+    Concat
+      Concat
+        Concat
+          BTree[276]
+            Array[30 elements] : { 270, 267, 275, 274, 268, 271 ...  }
+            Array[24 elements] : { 283, 288, 276, 278, 278, 276 ...  }
+          Concat
+            Array[43 elements] : { 300, 308, 305, 295, 292, 307 ...  }
+            Concat
+              Concat
+                Concat
+                  Concat
+                    BTree[328]
+                      Array[35 elements] : { 325, 317, 317, 320, 325, 310 ...  }
+                      BTree[351]
+                        Array[50 elements] : { 328, 329, 346, 332, 348, 343 ...  }
+                        Array[9 elements] : { 352, 355, 353, 354, 352, 353 ...  }
+                    Array[11 elements] : { 356, 359, 358, 356, 356, 359 ...  }
+                  Array[34 elements] : { 375, 370, 371, 372, 369, 360 ...  }
+                Array[8 elements] : { 384, 379, 383, 381, 380, 381 ...  }
+              Array[24 elements] : { 390, 394, 389, 389, 393, 385 ...  }
+        Array[47 elements] : { 398, 415, 399, 402, 396, 414 ...  }
+      Concat
+        Array[43 elements] : { 428, 417, 418, 417, 430, 431 ...  }
+        Concat
+          Concat
+            BTree[457]
+              Array[48 elements] : { 433, 453, 455, 435, 434, 441 ...  }
+              Array[43 elements] : { 457, 479, 471, 471, 483, 467 ...  }
+            Array[11 elements] : { 487, 490, 486, 487, 489, 490 ...  }
+          Array[21 elements] : { 491, 496, 495, 494, 493, 491 ...  }
+Switching to Sort-Only Policy with Threshold of 50
+policy_act_until_done 36 Actions: 734 us
+gROOT [1000 elements]
+  Concat
+    Concat
+      BTree[9]
+        SortedArray[20 elements]
+        SortedArray[45 elements]
+      Concat
+        Concat
+          Concat
+            Concat
+              Concat
+                SortedArray[17 elements]
+                BTree[57]
+                  SortedArray[40 elements]
+                  SortedArray[47 elements]
+              Concat
+                BTree[126]
+                  BTree[109]
+                    SortedArray[45 elements]
+                    SortedArray[31 elements]
+                  SortedArray[7 elements]
+                SortedArray[32 elements]
+            SortedArray[38 elements]
+          Concat
+            BTree[172]
+              SortedArray[7 elements]
+              BTree[177]
+                SortedArray[15 elements]
+                BTree[194]
+                  SortedArray[30 elements]
+                  SortedArray[22 elements]
+            SortedArray[48 elements]
+        BTree[234]
+          SortedArray[4 elements]
+          BTree[265]
+            BTree[255]
+              SortedArray[44 elements]
+              SortedArray[25 elements]
+            SortedArray[2 elements]
+    Concat
+      Concat
+        Concat
+          BTree[276]
+            SortedArray[30 elements]
+            SortedArray[24 elements]
+          Concat
+            SortedArray[43 elements]
+            Concat
+              Concat
+                Concat
+                  Concat
+                    BTree[328]
+                      SortedArray[35 elements]
+                      BTree[351]
+                        SortedArray[50 elements]
+                        SortedArray[9 elements]
+                    SortedArray[11 elements]
+                  SortedArray[34 elements]
+                SortedArray[8 elements]
+              SortedArray[24 elements]
+        SortedArray[47 elements]
+      Concat
+        SortedArray[43 elements]
+        Concat
+          Concat
+            BTree[457]
+              SortedArray[48 elements]
+              SortedArray[43 elements]
+            SortedArray[11 elements]
+          SortedArray[21 elements]
+Switching to Merge-Only Policy with Threshold of 50
+policy_act_until_done 35 Actions: 2746 us
+gROOT [1000 elements]
+  SortedArray[1000 elements]
+Switching to random point scan
+Scan JITD time in Random Mode: 17 us
+Time[test/Simple_Tests/divide_small.jitd]: 0 s
+Time[2]: 0 s

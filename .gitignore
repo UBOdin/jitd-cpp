@@ -1,0 +1,28 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+dist/*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Local-only files
+results
+
+*.o
+*.dSYM
+synthesis/examples/btree
+workload
+*.o
+driver
+<<<<<<< HEAD
+workload_gen
+Instruments/*
+=======
+workload_gen
+>>>>>>> 1b93f825f114815d9307a1e8198c474efd11c027

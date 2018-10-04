@@ -1,0 +1,3 @@
+init_unorderedmap random 1000000000 1000000000
+random_scan_unorderedmap 1000 1000000000
+dump
