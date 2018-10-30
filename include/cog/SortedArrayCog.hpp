@@ -40,6 +40,7 @@ class SortedArrayCog : public Cog<Tuple>
       exit(-1);
       //return nullptr;
     }
+
     std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
     {
       //std::cout<<"no rhs pointer";
@@ -47,6 +48,12 @@ class SortedArrayCog : public Cog<Tuple>
       assert(0);
       exit(-1);
       //return nullptr;
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_most() 
+    {
+      std::cerr << "no rhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
     }
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) {}
     Tuple getSepVal(){std::cerr <<"Sorted Array Cog no sep";assert(0);return 0;}
@@ -59,7 +66,14 @@ class SortedArrayCog : public Cog<Tuple>
     void printDebug(int depth)
     {
       Cog<Tuple>::printPrefix(depth);
-      std::cout << "SortedArray[" << (end-start) << " elements]" << std::endl;
+      std::cout << "Sorted Array[" << (end-start) << " elements] : { ";
+      BufferElement<Tuple> curr = start;
+      int i = 0;
+      for(; (i < 6) && (curr != end); ++curr, ++i){
+        std::cout << (i != 0 ? ", " : "") << curr->key;
+      }
+      if(curr != end) { std::cout << " ... "; }
+      std::cout << " }\n";
     }
     bool getKey(Tuple key, BufferElement<Tuple> &result)
     {
@@ -80,8 +94,10 @@ class SortedArrayCog : public Cog<Tuple>
       if(high > end){ high = end; }
       if(curr < high){
          temp = lower_bound(curr, high, key);
+
       }
       //return (temp->key == key.key) ? true : false;
+      //std::cout<<"the value of temp is"<<temp->key<<std::endl;
       if(temp->key == key.key )
       {
         result = temp;
@@ -95,6 +111,12 @@ class SortedArrayCog : public Cog<Tuple>
         return false;
       }
       
+    }
+    bool desc_key(Record key)
+    {
+      //std::cout<<"In Sorted Array desc()"<<std::endl;
+      
+      return true; 
     }
     Buffer<Tuple> buffer;
     BufferElement<Tuple> start;

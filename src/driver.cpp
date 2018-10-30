@@ -26,7 +26,7 @@ RecordBuffer buffer_cmd(istream &toks)
   if(string("random") == fill) {
     int len, max;
     toks >> len >> max;
-    //std::cout << "length:"<<len <<"Max:"<<max<<std::endl;
+    std::cout << "length:"<<len <<"Max:"<<max<<std::endl;
     return build_buffer(len,max);        
 
   } else if(string("explicit") == fill) {
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
           break;
         case JITD_TEST:
           t = jitd_test(jitd, *src, interactive, 0);
-          cout << "Time[" << argv[i] << "]: " << t << " s" << endl;
+          cout << "JITD ran all operations for a Total Time[" << argv[i] << "]: " << t << " s" << endl;
           break;
         case MAP_TEST:
           ds_test(*src);

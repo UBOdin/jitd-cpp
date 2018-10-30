@@ -85,6 +85,11 @@ class Cog {
       std::cerr << type << std::endl;
       assert(0);
     }
+    virtual std::shared_ptr<CogHandleBase<Tuple> > rhs_most()
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
     virtual std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr()
     {
       std::cerr << type << std::endl;
@@ -115,7 +120,6 @@ class Cog {
       std::cerr << type << std::endl;
       assert(0);
     }
-    
     void printDebug() { printDebug(0); }
     void printPrefix(int depth){ while(depth > 0){ std::cout << "  "; depth--; } }
     virtual void printDebug(int depth) {
@@ -123,6 +127,11 @@ class Cog {
       std::cout << "???" << std::endl;
     }
     virtual bool getKey(Record key, BufferElement<Tuple> &result)
+    {
+      std::cerr << type << std::endl;
+      assert(0);
+    }
+    virtual bool desc_key(Record key)
     {
       std::cerr << type << std::endl;
       assert(0);
@@ -171,9 +180,11 @@ class CogHandleBase {
     inline void            printDebug()          { get()->printDebug(); }
     inline void            printDebug(int depth) { get()->printDebug(depth); }
     inline bool            getKey(Record key, BufferElement<Tuple> &result) {return get()->getKey(key,result);} 
+    inline bool            desc_key(Record key) {return get()->desc_key(key);} 
     inline Buffer<Tuple>   getBuffer() {return get()->getBuffer();}
     inline bool            lhs_leaf() {return get()->lhs_leaf();} 
     inline bool            rhs_leaf() {return get()->rhs_leaf();}
+    inline std::shared_ptr<CogHandleBase<Tuple> > rhs_most(){return get()->rhs_most();}
     inline Tuple           getSepVal() {return get()->getSepVal();}
     inline std::shared_ptr<CogHandleBase<Tuple> > lhs_ptr() {return get()->lhs_ptr();}
     inline std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() {return get()->rhs_ptr();}

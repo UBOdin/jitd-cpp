@@ -11,7 +11,58 @@
 #include "transform.hpp"
 #include "policy.hpp"
 using namespace std;
-//template<class Tuple, class Policy>
+CogPtr<Record> cog_desc;
+void split(CogPtr<Record> &cog)
+{
+    if(cog->type == COG_ARRAY || cog->type == COG_SORTED_ARRAY)
+    {
+    ArrayCog<Record> *arr = (ArrayCog<Record> *)cog.get();
+    BufferElement<Record> pivot = arr->midElement();
+    //std::cout<<"the rand elem is"<<pivot->key<<std::endl;
+    std::pair<Buffer<Record>,Buffer<Record>> splits = arr->split(*pivot);
+    //std::pair<Buffer<Record>,Buffer<Record>> splits = arr->splitPos(pivot);
+    Buffer<Record> lhs = splits.first;
+    Buffer<Record> rhs = splits.second;
+    std::sort(lhs->begin(),lhs->end());
+    std::sort(rhs->begin(),rhs->end());
+    CogPtr<Record> lhsC = CogPtr<Record>(new SortedArrayCog<Record>(lhs,lhs->begin(),lhs->end()));
+            
+    CogPtr<Record> rhsC = CogPtr<Record>(new SortedArrayCog<Record>(rhs,rhs->begin(),rhs->end()));
+            
+    CogHandle<Record> lhsH(new CogHandleBase<Record>(lhsC));
+    CogHandle<Record> rhsH(new CogHandleBase<Record>(rhsC));
+    cog = CogPtr<Record>(new BTreeCog<Record>(lhsH, rhsH, *pivot));
+    }
+}
+// void splitBtree(CogHandleBase<Record> &cog)
+// {
+//     if(cog.type() == COG_ARRAY || cog.type() == COG_SORTED_ARRAY)
+//     {
+//         std::cout<<"A/SA"<<std::endl;
+//     ArrayCog<Record> *arr = (ArrayCog<Record> *)cog.get();
+//     BufferElement<Record> pivot = arr->randElement();
+//     std::cout<<"the rand elem is"<<pivot->key<<std::endl;
+//     std::pair<Buffer<Record>,Buffer<Record>> splits = arr->split(*pivot);
+//     //std::pair<Buffer<Record>,Buffer<Record>> splits = arr->splitPos(pivot);
+//     Buffer<Record> lhs = splits.first;
+//     Buffer<Record> rhs = splits.second;
+//     std::sort(lhs->begin(),lhs->end());
+//     std::sort(rhs->begin(),rhs->end());
+//     CogPtr<Record> lhsC = CogPtr<Record>(new SortedArrayCog<Record>(lhs,lhs->begin(),lhs->end()));
+            
+//     CogPtr<Record> rhsC = CogPtr<Record>(new SortedArrayCog<Record>(rhs,rhs->begin(),rhs->end()));
+            
+//     CogHandle<Record> lhsH(new CogHandleBase<Record>(lhsC));
+//     CogHandle<Record> rhsH(new CogHandleBase<Record>(rhsC));
+//     cog = CogPtr<Record>(new BTreeCog<Record>(lhsH, rhsH, *pivot));
+//     }
+//     if(cog->type == COG_BTREE)
+//     {
+//         std::cout<<"BT"<<std::endl;
+//     }
+//     //return cog;
+// }
+//template<class Record, class Policy>
 void sm_test(istream &input)
 {
 	//cout << "In simulator class finally" << endl;
@@ -70,6 +121,41 @@ void sm_test(istream &input)
     		gettimeofday(&end_crack, NULL);
     		cout << "Time for single crack : " << total_time(start_crack, end_crack) << " us" << endl;
     	}
+        CASE("MEASURE_MERGE_TIME")
+        {
+            std::cout<<"in measure merge time"<<std::endl;
+            timeval start_merge, end_merge;
+            CogPtr<Record> cog = data_array->get();
+            
+            if(cog->type == COG_ARRAY) {
+            //std::cout <<"Array Cog Found ready to split" <<std::endl;
+            ArrayCog<Record> *arr = (ArrayCog<Record> *)cog.get();
+            BufferElement<Record> pivot = arr->randElement();
+            //std::cout<<"the mid elem is"<<pivot->key<<std::endl;
+            std::pair<Buffer<Record>,Buffer<Record>> splits = arr->split(*pivot);
+            //std::pair<Buffer<Record>,Buffer<Record>> splits = arr->splitPos(pivot);
+            Buffer<Record> lhs = splits.first;
+            Buffer<Record> rhs = splits.second;
+            std::sort(lhs->begin(),lhs->end());
+            std::sort(rhs->begin(),rhs->end());
+            CogPtr<Record> lhsC = CogPtr<Record>(new SortedArrayCog<Record>(lhs,lhs->begin(),lhs->end()));
+            
+            CogPtr<Record> rhsC = CogPtr<Record>(new SortedArrayCog<Record>(rhs,rhs->begin(),rhs->end()));
+            
+            CogHandle<Record> lhsH(new CogHandleBase<Record>(lhsC));
+            CogHandle<Record> rhsH(new CogHandleBase<Record>(rhsC));
+            cog = CogPtr<Record>(new BTreeCog<Record>(lhsH, rhsH, *pivot));
+            if(cog->type == COG_BTREE)
+            {
+                //std::cout<<"Btree found to merge"<<std::endl;
+                gettimeofday(&start_merge, NULL);
+                mergeArray(cog);
+                gettimeofday(&end_merge, NULL);
+
+            } 
+            cout << "Time for single merge : " << total_time(start_merge, end_merge) << " us" << endl; 
+            }
+        }
         CASE("MEASURE_SORTED_SCAN_TIME")
         {
             //cout <<"measure scan time"<<endl;
@@ -105,6 +191,36 @@ void sm_test(istream &input)
             keyFound = data_array->getKey(target,result);
             gettimeofday(&end_us_scan, NULL);
             cout << "Time for 1 scan in an unsorted array : " << total_time(start_us_scan, end_us_scan) << " us" << endl;
+        }
+        CASE("MEASURE_DESCENT_TIME")
+        {
+            int height_of_split;
+            toks >> height_of_split;
+            timeval start_us_scan, end_us_scan;
+            cog_desc = data_array->get();
+            split(cog_desc);
+            BufferElement<Record> result;
+            //cog_desc->printDebug();
+            CogPtr<Record> rhstosplit = cog_desc->rhs_most()->get();
+            //std::cout<<"type of rhs->most" <<rhstosplit->type<<std::endl;
+            for(int i=1;i<height_of_split;i++)
+            {
+                if(rhstosplit->type == COG_ARRAY || rhstosplit->type == COG_SORTED_ARRAY)
+                {
+                split(rhstosplit);
+                cog_desc->rhs_most()->put(rhstosplit);
+                rhstosplit = cog_desc->rhs_most()->get();
+                }
+                else
+                {
+                    std::cout<<"Not a leaf"<<std::endl;
+                }
+            }
+            //cog_desc->printDebug();
+            gettimeofday(&start_us_scan, NULL);
+            cog_desc->desc_key(max);
+            gettimeofday(&end_us_scan, NULL);
+            cout << "Time for "<<height_of_split<<" Descends is :" << total_time(start_us_scan, end_us_scan) << " us" << endl;    
         }
 	}
 	

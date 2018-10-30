@@ -55,12 +55,14 @@ template <typename Tuple>
     }
     return std::pair<Buffer<Tuple>,Buffer<Tuple> >(low, high);
   }
+
 template <typename Tuple>
   inline std::pair<Buffer<Tuple>,Buffer<Tuple>> 
     splitBuffer(Buffer<Tuple> b, const Tuple &pivot)
   {
     return splitBuffer(b->begin(), b->end(), pivot);
   }
+
 
 
 #endif // _DATA_HPP_SHIELD

@@ -33,6 +33,7 @@ class BTreeCog : public Cog<Tuple>
       }
       //return lhs;
     }
+
     bool rhs_leaf()
     {
       if(rhs->type() == COG_SORTED_ARRAY || rhs->type() == COG_ARRAY )
@@ -49,9 +50,27 @@ class BTreeCog : public Cog<Tuple>
     {
       return lhs;
     }
+    std::shared_ptr<CogHandleBase<Tuple> > lhs_most() 
+    {
+      
+      return lhs->lhs_most();
+    }
     std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
     {
       return rhs;
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_most() 
+    {
+      if(rhs->type() == COG_ARRAY || rhs->type() == COG_SORTED_ARRAY)
+      {
+        //std::cout<<"child is leaf"<<std::endl;
+        return rhs;
+      }
+      else
+      {
+        return rhs->rhs_most();
+      }
+      
     }
     Tuple getSepVal(){return sep;}
     void apply_to_children(std::function<void(CogHandle<Tuple>)> fn) 
@@ -82,6 +101,22 @@ class BTreeCog : public Cog<Tuple>
          //std::cout<<"In RHS :the sep value is "<< sep <<std::endl;
         return rhs->getKey(key,result);
       }
+
+    }
+    bool desc_key(Record key)
+    {
+     
+      //std::cout<<"In BTree getKey";
+        if(!(key < sep)) 
+        {
+          //std::cout<<"In RHS :the sep value is "<< sep <<std::endl;
+          return rhs->desc_key(key);
+        }     
+        else
+        {
+          return false;
+        }
+      
 
     }
     const Tuple sep;

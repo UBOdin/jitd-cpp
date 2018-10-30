@@ -27,6 +27,11 @@ class ArrayCog : public Cog<Tuple>
     {
       return splitBuffer(start, end, pivot);
     }
+    
+    BufferElement<Tuple> midElement()
+    {
+      return (start+((end-start)/2));
+    }
     BufferElement<Tuple> randElement()
       { return (start+(rand() % (end-start))); }
     BufferElement<Tuple> getStart()
@@ -51,7 +56,14 @@ class ArrayCog : public Cog<Tuple>
       assert(0);
       exit(-1);
     }
+    
     std::shared_ptr<CogHandleBase<Tuple> > rhs_ptr() 
+    {
+      std::cerr << "no rhs pointer" << std::endl;
+      assert(0);
+      exit(-1);
+    }
+    std::shared_ptr<CogHandleBase<Tuple> > rhs_most() 
     {
       std::cerr << "no rhs pointer" << std::endl;
       assert(0);
@@ -88,6 +100,12 @@ class ArrayCog : public Cog<Tuple>
         }
       }
       return keyFound; 
+    }
+    bool desc_key(Record key)
+    {
+      //std::cout<<"In Array desc()"<<std::endl;
+      
+      return true; 
     }
     Buffer<Tuple> buffer;
     BufferElement<Tuple> start;

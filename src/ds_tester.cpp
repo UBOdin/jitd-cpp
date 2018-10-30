@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <sstream>
 #include <map>
@@ -36,8 +35,10 @@ void ds_test(istream &input)
         map_data.push_back(std::make_pair(curr->key, curr->value));
       }
 
-      timeval start_load, end_load;      
+      timeval start_load, end_load; 
+      std::cout<<"inserting..."<<std::endl;     
       gettimeofday(&start_load, NULL);
+      
       for(vector<pair<Key,Value>>::iterator curr = map_data.begin(); curr != map_data.end(); curr++){
         ds_btree->insert(*curr);
         //std::cout<<"value being inserted"<<curr->first<<std::endl;
@@ -60,7 +61,8 @@ void ds_test(istream &input)
         map_data.push_back(std::make_pair(curr->key, curr->value));
       }
 
-      timeval start_load, end_load;      
+      timeval start_load, end_load;  
+      std::cout<<"inserting..."<<std::endl;    
       gettimeofday(&start_load, NULL);
       for(vector<pair<Key,Value>>::iterator curr = map_data.begin(); curr != map_data.end(); curr++){
         ds_map->insert(*curr);
@@ -87,7 +89,8 @@ void ds_test(istream &input)
         map_data.push_back(std::make_pair(curr->key, curr->value));
       }
 
-      timeval start_load, end_load;      
+      timeval start_load, end_load;
+      std::cout<<"inserting..."<<std::endl;      
       gettimeofday(&start_load, NULL);
       for(vector<pair<Key,Value>>::iterator curr = map_data.begin(); curr != map_data.end(); curr++){
         ds_unorderedmap->insert(*curr);
@@ -109,24 +112,29 @@ void ds_test(istream &input)
         //cout << "Random detected" << endl ;
         long int key;
         int scan_cnt, max_scan_val;
-
+        double time;
+        double running_time = 0;
         toks >> scan_cnt >> max_scan_val;
         //cout << scan_cnt << max_scan_val << endl;
         timeval start_scan, end_scan;  
         std::cout<<"Scanning...."<<std::endl;    
-        gettimeofday(&start_scan, NULL);
+        // gettimeofday(&start_scan, NULL);
         while(scan_cnt != 0)
         {
           key = rand() % max_scan_val;
           // cout << "while loop number : " << scan_cnt << endl;
           //cout<< "searching for key : " << key << endl;
           //ds_btree->find(key);
+          gettimeofday(&start_scan, NULL);
           ds_btree->find(key);
+          gettimeofday(&end_scan, NULL);
+          time = total_time(start_scan, end_scan);
+          running_time += time ;
           --scan_cnt;
 
         }
-        gettimeofday(&end_scan, NULL);
-        cout << "Scan Btree time in Random Mode: " << total_time(start_scan, end_scan) << " us" << endl;
+        // gettimeofday(&end_scan, NULL);
+        cout << "Scan Btree time in Random Mode: " << running_time << " us" << endl;
         //cout << "Broke while loop as scan_cnt is 0" <<endl;
 
       }
@@ -152,12 +160,12 @@ void ds_test(istream &input)
       if(num1 < num2)
       {
         k1 = num1;
-        k2 = num2;
+        k2 = num1+1000;
       }
       else
       {
         k1 = num2;
-        k2 = num1;
+        k2 = num2+1000;
       }
       //k1 = 0; k2=8;
       std::cout<<"the key range is ["<< k1 <<","<<k2 <<"]"<<std::endl;
@@ -171,31 +179,38 @@ void ds_test(istream &input)
       gettimeofday(&end_scan, NULL);
       time_taken = total_time(start_scan, end_scan);
       cout << "Scan Btree time in Range Mode for range scan "<< i <<"is : " << time_taken << " us" <<std::endl;
-      }
       running_time += time_taken;
+      }
+      
       cout<<"Time taken for "<<noofscans<<" btree scans is : "<<running_time<<" us"<<std::endl;
     }
     CASE("random_scan_orderedmap") { /* Uniform */
         //cout << "Random detected" << endl ;
         long int key;
+        double time;
+        double running_time = 0;
         int scan_cnt, max_scan_val;
         std::cout<<"Scanning....";
         toks >> scan_cnt >> max_scan_val;
         //cout << scan_cnt << max_scan_val << endl;
         timeval start_scan, end_scan;      
-        gettimeofday(&start_scan, NULL);
+        // gettimeofday(&start_scan, NULL);
         while(scan_cnt != 0)
         {
           key = rand() % max_scan_val;
           // cout << "while loop number : " << scan_cnt << endl;
           //cout<< "searching for key : " << key << endl;
           //ds_map->find(key);
+          gettimeofday(&start_scan, NULL);
           ds_map->find(key);
+          gettimeofday(&end_scan, NULL);
+          time = total_time(start_scan, end_scan);
+          running_time += time;
           --scan_cnt;
 
         }
-        gettimeofday(&end_scan, NULL);
-        cout << "Scan Map time in Random Mode: " << total_time(start_scan, end_scan) << " us" <<std::endl;
+        // gettimeofday(&end_scan, NULL);
+        cout << "Scan Map time in Random Mode: " << running_time << " us" <<std::endl;
         //cout << "Broke while loop as scan_cnt is 0" <<endl;
 
       }
@@ -210,6 +225,8 @@ void ds_test(istream &input)
       toks >> upper;
       toks >> noofscans;
       std::cout<<"Scanning...."<<std::endl;
+      // k1.value = NULL;
+      // K2.value = NULL;
       for(int i=0;i<=noofscans;i++)
       {
       num1 = (rand()%(upper - lower +1))+lower;
@@ -219,12 +236,12 @@ void ds_test(istream &input)
       if(num1 < num2)
       {
         k1 = num1;
-        k2 = num2;
+        k2 = num1+1000;
       }
       else
       {
         k1 = num2;
-        k2 = num1;
+        k2 = num2+1000;
       }
       std::cout<<"the key range is ["<< k1 <<","<<k2 <<"]"<<std::endl;
       gettimeofday(&start_scan, NULL);
@@ -237,8 +254,9 @@ void ds_test(istream &input)
       gettimeofday(&end_scan, NULL);
       time_taken = total_time(start_scan, end_scan);
       cout << "Scan ordered map time in Range Mode for range scan "<< i <<"is : " << time_taken << " us" <<std::endl;
-      }
       running_time += time_taken;
+      }
+      
       cout<<"Time taken for "<<noofscans<<" orderedmap scans is : " <<running_time<<" us"<<std::endl;
     }
       
@@ -246,23 +264,28 @@ void ds_test(istream &input)
         //cout << "Random detected" << endl ;
         long int key;
         int scan_cnt, max_scan_val;
-
+        double time;
+        double running_time = 0;
         toks >> scan_cnt >> max_scan_val;
         //cout << scan_cnt << max_scan_val << endl;
         timeval start_scan, end_scan;  
         std::cout<<"Scanning...."<<std::endl;    
-        gettimeofday(&start_scan, NULL);
+        //gettimeofday(&start_scan, NULL);
         while(scan_cnt != 0)
         {
           key = rand() % max_scan_val;
           // cout << "while loop number : " << scan_cnt << endl;
           //cout<< "searching for key : " << key << endl;
+          gettimeofday(&start_scan, NULL);
           ds_unorderedmap->find(key);
+          gettimeofday(&end_scan, NULL);
+          time = total_time(start_scan, end_scan);
+          running_time += time;
           --scan_cnt;
 
         }
-        gettimeofday(&end_scan, NULL);
-        cout << "Scan UnorderedMap time in Random Mode: " << total_time(start_scan, end_scan) << " us" << endl;
+        //gettimeofday(&end_scan, NULL);
+        cout << "Scan UnorderedMap time in Random Mode: " << running_time << " us" << endl;
         //cout << "Broke while loop as scan_cnt is 0" <<endl;
 
       }

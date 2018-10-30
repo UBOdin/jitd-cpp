@@ -35,6 +35,7 @@ RecordBufferSet build_bufferSet(int len, int max)
   while(buff->size() < len && i < max)
   {
     record.key = i;
+    // std::cout<<i;
     record.value = (Value)0xDEADBEEF;
     // if(!buff->contains(record.key))
     // {
@@ -43,7 +44,7 @@ RecordBufferSet build_bufferSet(int len, int max)
       i++;
     //}
   }
-  //std::cout<<"buff size is"<<buff->size()<<std::endl;
+  std::cout<<"buff size is"<<buff->size()<<std::endl;
   return buff;
 }
 RecordBuffer load_buffer(istream &input)
