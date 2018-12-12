@@ -26,6 +26,20 @@ RecordBuffer build_buffer(int len, int max)
   }
   return buff;
 }
+RecordBuffer build_singleton(long insert_value_max)
+{
+  //std::cout<<insert_value_max;
+  int i = 0;
+  //Record record;
+  RecordBuffer buff(new std::vector<Record>(1));
+  for(i = 0; i < 1; i++){
+    (*buff)[i].key = rand() % insert_value_max;
+    //std::cout<<"inserted value"<< (*buff)[i].key;
+    (*buff)[i].value = (Value)0xDEADBEEF;
+  }
+  return buff;
+}
+
 RecordBufferSet build_bufferSet(int len, int max)
 {
   int i = 0;

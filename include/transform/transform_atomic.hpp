@@ -70,7 +70,46 @@ template <class Tuple>
       else
       {return false;}
     }    
-
+template <class Tuple>
+  bool pushDown(CogPtr<Tuple> &cog)
+    {
+      BufferElement<Tuple> singleton;
+      std::cout<<"atomic transform push down"<<std::endl;
+      if(cog->type == COG_CONCAT)
+      {
+        std::cout<<"concat cog found"<<std::endl;
+        CogHandle<Tuple> lhs = cog->lhs_ptr();
+        CogHandle<Tuple> rhs = cog->rhs_ptr();
+        Tuple sep = lhs->getSepVal();
+        std::cout<<"lhs"<<lhs->type()<<sep.key;
+        std::cout<<"rhs"<<rhs->type();
+        if(rhs->type() == COG_ARRAY)
+        {
+          singleton = rhs->get()->getBuffer()->begin();
+          std::cout<<"singleton"<<singleton->key<<std::endl;
+        }
+        if(lhs->type() == COG_BTREE)
+        {
+          std::cout<<"BTEE FOUND"<<std::endl;
+          if(singleton->key < sep.key)
+          {
+            ConcatCog<Tuple> *newRootCog = new ConcatCog<Tuple>(lhs->lhs_ptr(),rhs);
+            BTreeCog<Tuple> *newRoot = new BTreeCog<Tuple>(CogHandle<Tuple>(new CogHandleBase<Tuple>(CogPtr<Tuple>(newRootCog))),lhs->rhs_ptr(),sep);
+            cog = CogPtr<Tuple>(newRoot);
+          }
+          else
+          {
+            ConcatCog<Tuple> *newRootCog = new ConcatCog<Tuple>(lhs->rhs_ptr(),rhs);
+            BTreeCog<Tuple> *newRoot = new BTreeCog<Tuple>(lhs->lhs_ptr(),CogHandle<Tuple>(new CogHandleBase<Tuple>(CogPtr<Tuple>(newRootCog))),sep);
+            cog = CogPtr<Tuple>(newRoot);
+          }
+        }
+        
+    //    ConcatCog<Tuple> *newRootCog = new ConcatCog<Tuple>(lhs->lhs_ptr(),rhs);
+    //    BTreeCog<Tuple> *newRoot = new BTreeCog<Tuple>(CogHandle<Tuple>(new CogHandleBase<Tuple>(CogPtr<Tuple>(newRootCog))),lhs->rhs_ptr(),sep);
+      }
+      return false;
+    }
 template <class Tuple>
   bool sortArray(CogPtr<Tuple> &cog)
     {

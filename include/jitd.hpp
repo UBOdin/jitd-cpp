@@ -14,7 +14,6 @@
 #include "transform.hpp"
 #include "policy.hpp"
 
-
 template<class Tuple, class Policy>
 class JITD {
   
@@ -61,7 +60,27 @@ class JITD {
       policy.init(root);
       
     }
+    //transformatomic.hpp
+    // void pushdown()
+    // {
+    //   std::cout<<"in jitd::pushdown"<<std::endl;
+    //   if(root->type() == COG_CONCAT)
+    //   {
+    //     std::cout<<"concat cog found"<<std::endl;
+    //     CogHandle<Tuple> lhs = root->lhs_ptr();
+    //     CogHandle<Tuple> rhs = root->rhs_ptr();
+    //     Tuple sep = lhs->getSepVal();
 
+
+    //     std::cout<<"lhs"<<lhs->type()<<sep.key;
+    //     std::cout<<"rhs"<<rhs->type();
+    //    ConcatCog<Tuple> *newRootCog = new ConcatCog<Tuple>(lhs->lhs_ptr(),rhs);
+    //    BTreeCog<Tuple> *newRoot = new BTreeCog<Tuple>(CogHandle<Tuple>(new CogHandleBase<Tuple>(CogPtr<Tuple>(newRootCog))),lhs->rhs_ptr(),sep);
+      
+    //   //root->put(newRoot)
+
+    //   }
+    // }
 
     void insert(Buffer<Tuple> records)
     {

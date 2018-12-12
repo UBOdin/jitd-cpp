@@ -47,11 +47,12 @@ template <class Tuple> class UniversalPolicy {
   CogPtr<Tuple> cogToMerge;
   long long int min_score;
   CogHandle<Tuple> oldCogHandle;
+  CogHandle<Tuple> pushdownSwapHandle;
   ScoreFunction<Tuple> score;
 
   public:
 
-    UniversalPolicy() : todos(), score(NoOpScoreFunction<Tuple>), min_score(LLONG_MAX), cogToMerge(), oldCogHandle()
+    UniversalPolicy() : todos(), score(NoOpScoreFunction<Tuple>), min_score(LLONG_MAX), cogToMerge(), oldCogHandle(), pushdownSwapHandle()
     {}
 
     void init(CogHandle<Tuple> root){
@@ -79,6 +80,23 @@ template <class Tuple> class UniversalPolicy {
         return true;
       
     }
+    inline bool pushdown_act_once(CogHandle<Tuple> root)
+    {
+      CogPtr<Tuple> target = root->get();
+      pushdownSwapHandle = root;
+      if(target->type == COG_CONCAT)
+      {
+        std::cout<<"concat cog found"<<std::endl;
+        pushDown(target);
+        root->put(target);
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+      
+    }
     inline bool merge_act(CogHandle<Tuple> root)
     {
       min_score = LLONG_MAX;
@@ -96,6 +114,21 @@ template <class Tuple> class UniversalPolicy {
         //std::cout<<"ROOT merge"<<std::endl;
         mergeArray(target);root->put(target);return true;
       }
+      // if(lhsHandle->type() == COG_ARRAY && rhsHandle->type() == COG_ARRAY)
+      // {
+      //   //std::cout<<"ROOT merge"<<std::endl;
+      //   mergeArray(target);root->put(target);return true;
+      // }
+      // if(lhsHandle->type() == COG_SORTED_ARRAY && rhsHandle->type() == COG_ARRAY)
+      // {
+      //   //std::cout<<"ROOT merge"<<std::endl;
+      //   mergeArray(target);root->put(target);return true;
+      // }
+      // if(lhsHandle->type() == COG_ARRAY && rhsHandle->type() == COG_SORTED_ARRAY)
+      // {
+      //   //std::cout<<"ROOT merge"<<std::endl;
+      //   mergeArray(target);root->put(target);return true;
+      // }
       target->apply_to_children(std::bind(&UniversalPolicy::scoreCog, this, std::placeholders::_1));
         
       mergeArray(cogToMerge);
@@ -171,7 +204,7 @@ template <class Tuple> class UniversalPolicy {
       if(todos.empty()){ std::cout << "[ No Op ]\n"; }
       else 
       {
-        
+          //std::cout<<"todos not empty"<<std::endl<<todos.size();
           std::cout << "Target: " << todos.top().target 
                   // << "; Effect: " << todos.top().effect 
                   << "; Score: " << todos.top().score << std::endl;

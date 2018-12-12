@@ -8,7 +8,7 @@
 #include <cassert>
 #include <experimental/optional>
 #include "data.hpp"
-
+//#include "jitd.hpp"
 //
 // CogPtr/CogHandle
 // 
@@ -131,6 +131,11 @@ class Cog {
       std::cerr << type << std::endl;
       assert(0);
     }
+    // virtual void cog_insert_pos(std::shared_ptr<CogHandleBase<Tuple> > insert_val)
+    // {
+    //   std::cerr << type << std::endl;
+    //   assert(0);
+    // }
     virtual bool desc_key(Record key)
     {
       std::cerr << type << std::endl;
@@ -179,7 +184,8 @@ class CogHandleBase {
     inline CogType         type()                { return get()->type; }
     inline void            printDebug()          { get()->printDebug(); }
     inline void            printDebug(int depth) { get()->printDebug(depth); }
-    inline bool            getKey(Record key, BufferElement<Tuple> &result) {return get()->getKey(key,result);} 
+    inline bool            getKey(Record key, BufferElement<Tuple> &result) {return get()->getKey(key,result);}
+    //inline void            cog_insert_pos(std::shared_ptr<CogHandleBase<Tuple> > insert_val) { get()->cog_insert_pos(insert_val);} 
     inline bool            desc_key(Record key) {return get()->desc_key(key);} 
     inline Buffer<Tuple>   getBuffer() {return get()->getBuffer();}
     inline bool            lhs_leaf() {return get()->lhs_leaf();} 

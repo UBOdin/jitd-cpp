@@ -103,6 +103,57 @@ class BTreeCog : public Cog<Tuple>
       }
 
     }
+    // inline void swapInNewCog(CogHandle<Tuple> &newRoot, CogHandle<Tuple> &placeholder) 
+    // {
+    //   bool succeeded = false;
+    //   while(!succeeded){
+    //     placeholder = root;
+    //     succeeded = std::atomic_compare_exchange_strong(
+    //       &root,        // This value gets atomically replaced...
+    //       &placeholder, // ... if this is currently its value
+    //       newRoot       // This value replaces it.
+    //     );
+    //   }
+    // }
+    // void cog_insert_pos(CogHandle<Tuple> insert_val)
+    // {
+    //   std::cout<<"BTREE INSERT"<<std::endl;
+    //   std::cout<<insert_val->type();
+    //   Buffer<Tuple> buff = insert_val->getBuffer();
+    //   Tuple insert_value = buff->begin()->key;
+    //   std::cout<<"insert value is "<< insert_value.key << std::endl;
+    //   CogHandle<Tuple> ret;
+    //   if(insert_value < sep)
+    //   {
+    //     if(lhs_leaf())
+    //     {
+    //       std::cout<<"lhs of btree is a leaf"<< sep <<std::endl;
+    //       CogPtr<Tuple> new_cog = (CogPtr<Tuple>(new ConcatCog<Tuple>(lhs,insert_val)));
+    //       lhs->put(new_cog);
+  
+
+    //     }
+    //     else
+    //     {
+    //       std::cout<<"lhs of btree is a not leaf"<<std::endl;
+    //       lhs->cog_insert_pos(insert_val);
+    //       std::cout<<"blah...blah"<<std::endl;
+    //     }
+
+    //   }
+    //   else
+    //   {
+    //     if(rhs_leaf())
+    //     {
+    //       std::cout<<"rhs of btree is a leaf"<<std::endl;
+    //     }
+    //     else
+    //     {
+    //       std::cout<<"rhs of btree is a not leaf"<<std::endl;
+    //       rhs->cog_insert_pos(insert_val);
+    //     }
+    //   }
+    // }
     bool desc_key(Record key)
     {
      

@@ -6,7 +6,7 @@
 
 #include "jitd.hpp"
 #include "test.hpp"
-
+#define SEED_MAX RAND_MAX
 using namespace std;
 
 typedef enum {
@@ -44,6 +44,11 @@ RecordBuffer buffer_cmd(istream &toks)
     exit(-1);
   }
 }
+RecordBuffer buffer_singleton(long max_insert_val)
+{
+  
+  return build_singleton(max_insert_val);
+}
 RecordBufferSet buffer_cmd_set(istream &toks)
 {
   string fill;
@@ -80,8 +85,8 @@ int main(int argc, char **argv)
   bool interactive;
   JITD<Record, UniversalPolicy<Record>> jitd;
   
-  srand(RAND_MAX);
-  //cout <<"using rand max"<<endl;
+  srand(SEED_MAX);
+  cout <<"using rand max"<<SEED_MAX<<endl;
 //  sleep(1);
   for(i = 1; i < argc; i++){
     ifstream srcF;

@@ -13,5 +13,5 @@
 #include "policy/CrackArray.hpp"
 #include "policy/SortArray.hpp"
 #include "policy/MergeArray.hpp"
-
+#include "policy/PushdownConcatOnce.hpp"
 #endif //_POLICY_H_SHIELD

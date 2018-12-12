@@ -20,8 +20,9 @@ using namespace std;
 bool first_scan_isssued_flag = true;
 timeval first_scan_isssued;
 bool action_done = false;
-std::vector<Record> scan_buff(1000);
-std::vector<Record> range_scan_buff(1000);
+// RecordBuffer scan_buff = RecordBuffer(new vector<Record>);
+std::vector<Record> scan_buff;
+std::vector<Record> range_scan_buff;
 std::ostream&
 print_one(std::ostream& os)
 {
@@ -191,26 +192,43 @@ int jitd_test(
       gettimeofday(&end, NULL);
       cout << "Init JITD: " << total_time(start, end) << " us" << endl;
       //toks >> max_scan_val;
-      cout<<"Generating the scan vectors in range [0-1000000000] of size "<<scan_buff.size()<<std::endl;
-      for(int i=0;i<scan_buff.size();i++)
-      {
+      // cout<<"Generating the scan vectors in range [0-1000000000] of size "<<scan_buff.size()<<std::endl;
+      // for(int i=0;i<scan_buff.size();i++)
+      // {
 
-        scan_buff[i].key = rand()%1000000000;
-        scan_buff[i].value = NULL;
-        //cout<<"the key to scan is "<<scan_buff[i].key<<",";
+      //   scan_buff[i].key = rand()%1000000000;
+      //   scan_buff[i].value = NULL;
+      //   //cout<<"the key to scan is "<<scan_buff[i].key<<",";
+        
+      // }
+      // for(int i=0;i<range_scan_buff.size();i++)
+      // {
+
+      //   range_scan_buff[i].key = rand()%1000000000;
+      //   range_scan_buff[i].value = NULL;
+      //   //cout<<"the key to scan is "<<scan_buff[i].key<<",";
+        
+      // }
+    } CASE("gen_scan")
+    {
+      long noofscans,max_scan_val;
+      toks >> noofscans >> max_scan_val;
+      cout<<"In gen scan"<<endl;
+      for(int i=0;i<noofscans;i++)
+      {
+        //cout<<i<<endl;
+        scan_buff.emplace_back(rand()%max_scan_val);
+        // scan_buff[i].key = rand()%1000000000;
+        // scan_buff[i].value = NULL;
+        //cout<<scan_buff[i].key<<",";
         
       }
-      for(int i=0;i<range_scan_buff.size();i++)
-      {
 
-        range_scan_buff[i].key = rand()%1000000000;
-        range_scan_buff[i].value = NULL;
-        //cout<<"the key to scan is "<<scan_buff[i].key<<",";
-        
-      }
-    } CASE("insert") {
+    } 
+    CASE("insert") {
       timeval start, end;
       RecordBuffer data = buffer_cmd(toks);
+      //cout<<"size of insert "<<data->size()<<"/"<<data->begin()->key<<endl; 
       gettimeofday(&start, NULL);
       jitd.insert(data);
       gettimeofday(&end, NULL);
@@ -286,6 +304,16 @@ int jitd_test(
         jitd.reinitPolicy();
 
       }
+      CASE("pushdown-once")
+      {
+        int threshold;
+        toks >> threshold;
+        cout << "Switching to pushdown-once Policy with Threshold of " << threshold << endl;
+        jitd.getPolicy()->setScoreFunction(
+          std::bind(pushdownConcatOnce<Record>, threshold, std::placeholders::_1)
+        );
+        jitd.reinitPolicy();
+      }
       else {
         cerr << "Invalid Policy " << op << endl;
         exit(-1);
@@ -325,6 +353,16 @@ int jitd_test(
         used_microseconds += total_time(start, end);
       }
       cout << "Merge_act_for_ " << target_steps << " Actions: " << used_microseconds << " us" << endl;
+    }
+    CASE("pushdown_act_once") {
+      timeval start, end;
+      jitd.getPolicy()->describeNext();
+      JITD_TEST_POLICY *policy = jitd.getPolicy();
+      gettimeofday(&start, NULL);
+      policy->pushdown_act_once(jitd.getRoot());
+      gettimeofday(&end, NULL);
+      cout << "Policy Action: " << total_time(start, end) << " us" << endl;
+
     }
     CASE("policy_act_once") {
       timeval start, end;
@@ -444,6 +482,27 @@ int jitd_test(
         }
       }
      } 
+     CASE("insert-singleton")
+    {
+      cout<<"Switching to Singleton Inserts"<<endl;
+      int num_inserts = 0;
+      long max_insert_val = 0;
+      toks >> num_inserts >> max_insert_val;
+      for(int i=0;i<num_inserts;i++)
+      {
+        //cout<<"in insert"<<endl;
+        RecordBuffer singleton_buff = buffer_singleton(max_insert_val);
+        //jitd.get_insert_pos(singleton_buff);
+        jitd.insert(singleton_buff);
+      }
+      
+
+    }
+    // CASE("pushdown")
+    // {
+    //   cout<<"in push down"<<endl;
+    //   jitd.pushdown();
+    // }
      CASE("range-scan")
      {
         cout<<"Switching to Range-scan using iterators for "<<range_scan_buff.size()<<" scans"<<std::endl;
@@ -477,13 +536,14 @@ int jitd_test(
         //   }
         //   k1.key = num1;
         //   k2.key = num2;
-        for(int i = 0;i<range_scan_buff.size();i++)
+        gettimeofday(&start, NULL);
+        for(int i = 0;i<scan_buff.size();i++)
         {
-          k1.key = range_scan_buff[i].key;
+          k1.key = scan_buff[i].key;
           if(k1.key < (upper-1000))
           {
             
-            k2.key = range_scan_buff[i].key+1000;
+            k2.key = scan_buff[i].key+1000;
           }
           else
           {
@@ -493,7 +553,7 @@ int jitd_test(
           
           std::cout<<"the key range is ["<< k1.key <<","<<k2.key<<"]"<<std::endl;
           
-          gettimeofday(&start, NULL);
+          
           Iterator<Record> fiter = jitd.iterator();
           fiter->seek(k1);
           //std::cout<<"the value seeked is "<<*fiter->get()<<std::endl;  
@@ -508,13 +568,15 @@ int jitd_test(
           //     // std::cout<<"iterator pointing at value after 2nd next <<"<<*fiter->get()<<">>"<<std::endl;  
            }
           // std::cout <<"RETURNED"<<std::endl;
-          gettimeofday(&end, NULL); 
-          time_taken = total_time(start, end);
-          running_rs_time = running_rs_time + time_taken;
-          cout << "Range scan "<<" Time: " << time_taken << " us" << endl;
+           
+          //time_taken = total_time(start, end);
+          //running_rs_time = running_rs_time + time_taken;
+          //cout << "Range scan "<<" Time: " << time_taken << " us" << endl;
           //  print("Range-Scan ",i,"Time :",time_taken," us",'\n');
         }
-        std::cout<<"The Total Time for range scans is "<<running_rs_time<<" us"<<std::endl;
+        gettimeofday(&end, NULL);
+        time_taken = total_time(start, end);
+        std::cout<<"The Total Time for range scans is "<<time_taken<<" us"<<std::endl;
      }
      CASE("thread-range-scan")
      {
@@ -591,6 +653,7 @@ int jitd_test(
         std::cout<<"The Total Time for all range scans is "<<running_rs_time<<" us"<<std::endl;
 
      }
+     /** Scan time calculated for all scans at once and not running sum **/
     CASE("random_scan")
     {
 
@@ -614,19 +677,24 @@ int jitd_test(
       //   jitd.get(target);
       //   --scan_cnt;
       // }
-      for(int i=0;i<scan_buff.size();i++)
+      long scan_buff_size = scan_buff.size();
+      gettimeofday(&start_scan, NULL);
+      for(int i=0;i<scan_buff_size;i++)
       {
         //target.key = rand() % max_scan_val;
-        gettimeofday(&start_scan, NULL);
+        //gettimeofday(&start_scan, NULL);
         //jitd.get(target);
+        //cout<<"scanning for element"<<scan_buff[i]<<endl;
         jitd.get(scan_buff[i]);
-        gettimeofday(&end_scan, NULL);
-        scan_time = total_time(start_scan, end_scan); 
-        running_scan_time = running_scan_time + scan_time;
+        //gettimeofday(&end_scan, NULL);
+        //scan_time = total_time(start_scan, end_scan); 
+        //running_scan_time = running_scan_time + scan_time;
       }
+      gettimeofday(&end_scan, NULL);
+      scan_time = total_time(start_scan, end_scan); 
       //gettimeofday(&end_scan, NULL);
        
-      cout << "Scan JITD time in Random Mode: " << running_scan_time << " us" << endl;
+      cout << scan_buff_size <<" Scans JITD time in Random Mode: " << scan_time << " us" << endl;
 
     }
     CASE("thread_random_scan")
@@ -643,41 +711,44 @@ int jitd_test(
       target.value = NULL;
       timeval start_scan, end_scan;
       int i=0;
+      gettimeofday(&start_scan, NULL); 
       while(action_done == false)
       {
         if(i==scan_buff.size())
         {
           i=0;
         }
-        gettimeofday(&start_scan, NULL); 
+        
         jitd.get(scan_buff[i]);
-        gettimeofday(&end_scan, NULL);
+        
         if(first_scan_isssued_flag == true)
         {
           first_scan_isssued = start_scan;
           first_scan_isssued_flag = false;
         }
         //print("first_scan_isssued time ",first_scan_isssued.tv_sec,first_scan_isssued.tv_usec);
-        long double time = total_time(first_scan_isssued,start_scan);
-        print("Scan issued at relative time: ",time," us",'\n');
-        double time_taken = total_time(start_scan, end_scan);
-        running_time += time_taken;
+        //long double time = total_time(first_scan_isssued,start_scan);
+        //print("Scan issued at relative time: ",time," us",'\n');
+        //double time_taken = total_time(start_scan, end_scan);
+        //running_time += time_taken;
         //--scan_cnt;
         i++;
-        print("Time for random scan: ",time_taken," us",'\n');
+        //print("Time for random scan: ",time_taken," us",'\n');
 
-        if(time_taken <= 0)
-          {
-            this_thread::sleep_for(chrono::milliseconds(0));
-          }
-          else
-          {
-            this_thread::sleep_for(std::chrono::duration<double,std::micro>(sleep_time - time_taken));
-          }
+        // if(time_taken <= 0)
+        //   {
+        //     this_thread::sleep_for(chrono::milliseconds(0));
+        //   }
+        //   else
+        //   {
+        //     this_thread::sleep_for(std::chrono::duration<double,std::micro>(sleep_time - time_taken));
+        //   }
       }
+      gettimeofday(&end_scan, NULL);
+      double time_taken = total_time(start_scan, end_scan);
       //gettimeofday(&end_scan, NULL);
       //cout << "Scan JITD time in Random Mode: " << running_time << " us" << endl;
-      print("Total random scan JITD time in thread Mode: ",running_time," us",'\n');
+      print("Total random scan JITD time in thread Mode: ",time_taken," us",'\n');
 
     }
     CASE("scan_heavy_hitter")
@@ -760,6 +831,7 @@ int jitd_test(
     } CASE("size") {
       cout << jitd.size() << " records" << endl;
     } CASE("dump") {
+      std::cout<<"Indump"<<std::endl;
       jitd.printDebug();
       
       

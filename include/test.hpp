@@ -19,6 +19,7 @@ typedef BufferSet<Record> RecordBufferSet;
 typedef CogHandle<Record> RecordCogHandle;
 
 RecordBuffer build_buffer(int len, int max);
+RecordBuffer build_singleton(long insert_value);
 RecordBufferSet build_bufferSet(int len, int max);
 RecordBuffer load_buffer(std::istream &input);
 RecordCogHandle array_for_buffer(RecordBuffer buff);
@@ -29,6 +30,7 @@ RecordCogHandle build_random_sorted_array(int len, int max);
 
 double total_time(timeval &start, timeval &end);
 RecordBuffer buffer_cmd(std::istream &toks);
+RecordBuffer buffer_singleton(long max_insert_val);
 RecordBufferSet buffer_cmd_set(std::istream &toks);
 
 /// Utility Macros for Parsing command strings
